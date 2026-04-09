@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop All — TheSecondWave</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div id="page-loader">
+  <div class="loader-logo">THE SECOND WAVE</div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">THE<span>SECOND</span>WAVE</a>
+      <ul class="nav-links">
+        <li><a href="shop.html" style="color:var(--ink)">Shop All</a></li>
+        <li><a href="shop.html?cat=jerseys">Jerseys</a></li>
+        <li><a href="shop.html?cat=tees">T-Shirts</a></li>
+        <li><a href="shop.html?cat=essentials">Essentials</a></li>
+        <li><a href="index.html#about">About</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="nav-icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+        <button class="nav-icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+        <button class="nav-icon-btn" data-cart-open>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          <span class="cart-count">0</span>
+        </button>
+        <button class="hamburger"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-nav">
+  <ul>
+    <li><a href="shop.html">Shop All</a></li>
+    <li><a href="shop.html?cat=jerseys">Jerseys</a></li>
+    <li><a href="shop.html?cat=tees">T-Shirts</a></li>
+    <li><a href="shop.html?cat=essentials">Essentials</a></li>
+  </ul>
+</div>
+
+<!-- PAGE HERO -->
+<div class="page-hero" data-text="SHOP">
+  <div class="container">
+    <p class="page-hero-eyebrow">SS '25 Collection</p>
+    <h1 class="page-hero-title">Shop All</h1>
+    <p class="page-hero-sub">Premium streetwear, jerseys & everyday essentials</p>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="container">
+    <div class="filter-bar-inner">
+      <span class="filter-label">Filter:</span>
+      <div class="filter-group" style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">T-Shirts</button>
+        <button class="filter-btn">Football Jerseys</button>
+        <button class="filter-btn">Cricket Jerseys</button>
+        <button class="filter-btn">Essentials</button>
+      </div>
+
+      <select class="filter-select" aria-label="Size">
+        <option value="">Size</option>
+        <option>XS</option><option>S</option><option>M</option>
+        <option>L</option><option>XL</option><option>XXL</option>
+      </select>
+
+      <select class="filter-select" aria-label="Sort">
+        <option>Sort: Featured</option>
+        <option>Price: Low → High</option>
+        <option>Price: High → Low</option>
+        <option>Newest First</option>
+        <option>Best Sellers</option>
+      </select>
+
+      <div class="filter-spacer"></div>
+      <span class="results-count">24 products</span>
+      <div class="view-toggle">
+        <button class="view-btn active" aria-label="Grid view">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        </button>
+        <button class="view-btn" aria-label="List view">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SHOP GRID -->
+<section class="shop-section">
+  <div class="container">
+    <div class="shop-grid">
+
+      <!-- Product 1 -->
+      <div class="product-card reveal" onclick="window.location='product.html'">
+        <div class="product-card-media">
+          <img class="product-card-img" src="https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=500&q=80&fit=crop" alt="">
+          <img class="product-card-img-hover" src="https://images.unsplash.com/photo-1604671801908-6f0c6a092c05?w=500&q=80&fit=crop" alt="">
+          <span class="product-card-badge new">New</span>
+          <div class="product-card-actions">
+            <button class="product-action-btn" data-wishlist><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+            <button class="product-action-btn" data-add-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
+          </div>
+        </div>
+        <div class="product-card-info">
+          <div class="product-card-category">Football Jersey</div>
+          <div class="product-card-name">Wave Classic Home Kit</div>
+          <div class="product-card-footer"><span class="product-price">₹1,299</span><div class="product-rating"><span class="stars">★★★★★</span></div></div>
+        </div>
+      </div>
+
+      <!-- Product 2 -->
+      <div class="product-card reveal reveal-delay-1" onclick="window.location='product.html'">
+        <div class="product-card-media">
+          <img class="product-card-img" src="https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=500&q=80&fit=crop" alt="">
+          <img class="product-card-img-hover" src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=500&q=80&fit=crop" alt="">
+          <span class="product-card-badge sale">−20%</span>
+          <div class="product-card-actions">
+            <button class="product-action-btn" data-wishlist><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+            <button class="product-action-btn" data-add-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
+          </div>
+        </div>
+        <div class="product-card-info">
+          <div class="product-card-category">T-Shirt</div>
+          <div class="product-card-name">Oversized Wave Tee</div>
+          <div class="product-card-footer"><span class="product-price">₹799</span><span class="product-price-old">₹999</span></div>
+        </div>
+      </div>
+
+      <!-- Product 3 -->
+      <div class="product-card reveal reveal-delay-2" onclick="window.location='product.html'">
+        <div class="product-card-media">
+          <img class="product-card-img" src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500&q=80&fit=crop" alt="">
+          <img class="product-card-img-hover" src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=500&q=80&fit=crop" alt="">
+          <div class="product-card-actions">
+            <button class="product-action-btn" data-wishlist><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+            <button class="product-action-btn" data-add-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
+          </div>
+        </div>
+        <div class="product-card-info">
+          <div class="product-card-category">Cricket Jersey</div>
+          <div class="product-card-name">Pro Cricket Elite Set</div>
+          <div class="product-card-footer"><span class="product-price">₹1,599</span><div class="product-rating"><span class="stars">★★★★★</span></div></div>
+        </div>
+      </div>
+
+      <!-- Product 4 -->
+      <div class="product-card reveal reveal-delay-3" onclick="window.location='product.html'">
+        <div class="product-card-media">
+          <img class="product-card-img" src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=500&q=80&fit=crop" alt="">
+          <div class="product-card-actions">
+            <button class="product-action-btn" data-wishlist><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+            <button class="product-action-btn" data-add-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
+          </div>
+        </div>
+        <div class="product-card-info">
+          <div class="product-card-category">Essentials</div>
+          <div class="product-card-name">Street Fleece Hoodie</div>
+          <div class="product-card-footer"><span class="product-price">₹1,899</span></div>
+        </div>
+      </div>
+
+      <!-- Product 5 -->
+      <div class="product-card reveal" onclick="window.location='product.html'">
+        <div class="product-card-media">
+          <img class="product-card-img" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80&fit=crop" alt="">
+          <span class="product-card-badge">Limited</span>
+          <div class="product-card-actions">
+            <button class="product-action-btn" data-wishlist><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+            <button class="product-action-btn" data-add-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
+          </div>
+        </div>
+        <div class="product-card-info">
+          <div class="product-card-category">Football Jersey</div>
+          <div class="product-card-name">Away Kit – Midnight</div>
+          <div class="product-card-footer"><span class="product-price">₹1,399</span></div>
+        </div>
+      </div>
+
+      <!-- Product 6 -->
+      <div class="product-card reveal reveal-delay-1" onclick="window.location='product.html'">
+        <div class="product-card-media">
+          <img class="product-card-img" src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=500&q=80&fit=crop" alt="">
+          <img class="product-card-img-hover" src="https://images.unsplash.com/photo-1562157873-818bc0726f68?w=500&q=80&fit=crop" alt="">
+          <span class="product-card-badge new">New</span>
+          <div class="product-card-actions">
+            <button class="product-action-btn" data-wishlist><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+            <button class="product-action-btn" data-add-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
+          </div>
+        </div>
+        <div class="product-card-info">
+          <div class="product-card-category">T-Shirt</div>
+          <div class="product-card-name">Archive Graphic Tee</div>
+          <div class="product-card-footer"><span class="product-price">₹849</span></div>
+        </div>
+      </div>
+
+      <!-- Product 7 -->
+      <div class="product-card reveal reveal-delay-2" onclick="window.location='product.html'">
+        <div class="product-card-media">
+          <img class="product-card-img" src="https://images.unsplash.com/photo-1620799140188-3b2a02fd9a77?w=500&q=80&fit=crop" alt="">
+          <div class="product-card-actions">
+            <button class="product-action-btn" data-wishlist><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+            <button class="product-action-btn" data-add-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
+          </div>
+        </div>
+        <div class="product-card-info">
+          <div class="product-card-category">T-Shirt</div>
+          <div class="product-card-name">Clean Slate Tee</div>
+          <div class="product-card-footer"><span class="product-price">₹699</span></div>
+        </div>
+      </div>
+
+      <!-- Product 8 -->
+      <div class="product-card reveal reveal-delay-3" onclick="window.location='product.html'">
+        <div class="product-card-media">
+          <img class="product-card-img" src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500&q=80&fit=crop" alt="">
+          <div class="product-card-actions">
+            <button class="product-action-btn" data-wishlist><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+            <button class="product-action-btn" data-add-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
+          </div>
+        </div>
+        <div class="product-card-info">
+          <div class="product-card-category">Essentials</div>
+          <div class="product-card-name">Bomber Jacket</div>
+          <div class="product-card-footer"><span class="product-price">₹2,499</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Load More -->
+    <div style="text-align:center;margin-top:60px;" class="reveal">
+      <button class="btn-outline" onclick="this.textContent='Loading...'">Load More Products</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-logo">THE<span>SECOND</span>WAVE</div>
+        <p class="footer-tagline">Streetwear for those who move differently.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" class="social-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Shop</div>
+        <ul class="footer-links">
+          <li><a href="shop.html">All Products</a></li>
+          <li><a href="#">Jerseys</a></li>
+          <li><a href="#">T-Shirts</a></li>
+          <li><a href="#">Essentials</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Help</div>
+        <ul class="footer-links">
+          <li><a href="#">Size Guide</a></li>
+          <li><a href="#">Shipping</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Newsletter</div>
+        <p class="newsletter-desc">Get early access to new drops.</p>
+        <div class="newsletter-input-group" style="margin-top:12px;">
+          <input type="email" class="newsletter-input" placeholder="your@email.com">
+          <button class="newsletter-btn">Join</button>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2025 TheSecondWave. All rights reserved.</p>
+      <div class="footer-legal">
+        <a href="#">Privacy</a><a href="#">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cart-overlay"></div>
+<div class="cart-sidebar" id="cart-sidebar">
+  <div class="cart-header">
+    <div class="cart-title">Your Cart</div>
+    <button class="cart-close" id="cart-close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="cart-body"></div>
+  <div class="cart-footer">
+    <div class="cart-subtotal"><span>Subtotal</span><span>₹0</span></div>
+    <p class="cart-subtotal-note">Shipping calculated at checkout</p>
+    <button class="cart-checkout-btn">Proceed to Checkout</button>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16"><path d="M20 6L9 17l-5-5"/></svg>
+  <span class="toast-msg"></span>
+</div>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
