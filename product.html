@@ -746,10 +746,13 @@
 </div>
 
 <!-- SCRIPTS -->
-<script type="module" src="assets/js/cart.js"></script>
-<script type="module" src="assets/js/app.js"></script>
 <script type="module">
+// ============================================
+// PRODUCT PAGE — Unified module
+// ============================================
 import { fetchAllProducts, fetchProductById } from './assets/js/products.js';
+import './assets/js/cart.js';
+import './assets/js/app.js';
 
 // ---- STATE ----
 let currentProduct = null;
@@ -757,152 +760,106 @@ let selectedSize = null;
 let qty = 1;
 let selectedRating = 0;
 let imgIndex = 0;
+let lboxImgs = [], lboxIdx = 0;
 
-// ---- LOAD PRODUCT ----
+// ---- BOOT ----
 document.addEventListener('DOMContentLoaded', async () => {
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get('id');
+  const id = new URLSearchParams(window.location.search).get('id');
+  if (!id) { showNotFound(); return; }
 
-  if (!id) { showNoProduct(); return; }
-
-  // Load all products (needed for search + related)
+  // Load all products (needed for search bar + related)
   await fetchAllProducts();
 
-  let product = window.getProductById ? window.getProductById(id) : null;
-
-  // Fallback: fetch directly
-  if (!product) {
-    const { fetchProductById } = await import('./assets/js/products.js');
-    product = await fetchProductById(id);
-  }
-
-  // If still nothing, use a dummy product for preview
-  if (!product) {
-    product = getDummyProduct(id);
-  }
+  // Get this specific product
+  let product = window.getProductById?.(id) || await fetchProductById(id);
+  if (!product) { showNotFound(); return; }
 
   renderProduct(product);
 });
 
-function getDummyProduct(id) {
-  return {
-    id: id || '1',
-    name: 'Fan Version Jersey',
-    category: 'jersey',
-    brand: 'Adidas',
-    jerseyType: 'fan',
-    price: 799,
-    originalPrice: 1299,
-    images: [
-      'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=800&q=80',
-      'https://images.unsplash.com/photo-1614632537197-38a17061c2bd?w=800&q=80',
-      'https://images.unsplash.com/photo-1556906781-9a412961a28c?w=800&q=80',
-    ],
-    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-    stock: 7,
-    featured: true,
-    badge: 'new',
-    rating: 4.7,
-    reviews: 43,
-    description: 'Premium quality fan version jersey with authentic design. Made from breathable polyester fabric for maximum comfort during matches or casual wear.',
-    features: [
-      'Breathable polyester fabric',
-      'Official team badge embroidery',
-      'Authentic design matching original',
-      'Machine washable',
-      'Available in Fan and Player versions',
-    ],
-    specs: {
-      Material: 'Polyester',
-      Fit: 'Regular Fit',
-      Version: 'Fan Version',
-      'Care Instructions': 'Machine Wash Cold',
-    },
-  };
-}
-
-// ---- RENDER PRODUCT ----
+// ---- RENDER ----
 function renderProduct(product) {
   currentProduct = product;
   window.currentProduct = product;
 
   document.title = `${product.name} — RN Sports Hub`;
-  document.getElementById('bc-name').textContent = product.name;
-  document.getElementById('bc-shop').href = `shop.html?cat=${product.category}`;
-  document.getElementById('bc-shop').textContent = product.category.charAt(0).toUpperCase() + product.category.slice(1);
 
-  // Hide skeleton, show product
+  // Breadcrumb
+  const bcShop = document.getElementById('bc-shop');
+  const bcName = document.getElementById('bc-name');
+  if (bcShop) { bcShop.href=`shop.html?cat=${product.category}`; bcShop.textContent=cap(product.category); }
+  if (bcName) bcName.textContent = product.name;
+
+  // Hide skeleton, show layout
   document.getElementById('pdp-skeleton').style.display = 'none';
-  document.getElementById('pdp-layout').style.display = 'grid';
+  const layout = document.getElementById('pdp-layout');
+  layout.style.display = 'grid';
 
   // Gallery
   const imgs = product.images || [];
   const mainImg = document.getElementById('pdp-main-img');
-  mainImg.src = imgs[0] || '';
-  mainImg.alt = product.name;
-  mainImg.onerror = () => { mainImg.src = 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=800&q=80'; };
-
-  if (imgs.length > 1) {
-    document.getElementById('gallery-nav').style.display = 'flex';
+  if (mainImg) {
+    mainImg.src = imgs[0] || 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=800&q=80';
+    mainImg.alt = product.name;
+    mainImg.onerror = () => { mainImg.src='https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=800&q=80'; };
+    mainImg.onclick = () => openLightbox(0);
   }
+  if (imgs.length > 1) document.getElementById('gallery-nav').style.display = 'flex';
 
-  const thumbsEl = document.getElementById('pdp-thumbs');
-  thumbsEl.innerHTML = imgs.map((src, i) => `
+  document.getElementById('pdp-thumbs').innerHTML = imgs.map((src,i) => `
     <div class="pdp-thumb ${i===0?'active':''}" onclick="switchImg(${i})">
       <img src="${src}" alt="View ${i+1}" loading="lazy"
         onerror="this.src='https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=200&q=60'"/>
     </div>`).join('');
 
-  // Info column
+  // Info
   const disc = product.originalPrice && product.originalPrice > product.price
-    ? Math.round((1 - product.price / product.originalPrice) * 100) : 0;
+    ? Math.round((1-product.price/product.originalPrice)*100) : 0;
   const savings = product.originalPrice ? product.originalPrice - product.price : 0;
   const isOOS = product.stock === 0;
-  const stockPct = Math.min(100, ((product.stock || 0) / 20) * 100);
-  const badgeMap = { new: 'pdp-badge-new', hot: 'pdp-badge-hot', sale: 'pdp-badge-sale' };
+  const stockPct = Math.min(100,((product.stock||0)/20)*100);
+  const badgeMap = {new:'pdp-badge-new',hot:'pdp-badge-hot',sale:'pdp-badge-sale'};
 
   document.getElementById('pdp-info').innerHTML = `
-    <div class="pdp-brand-cat">${product.brand || ''} · ${(product.category||'').toUpperCase()}${product.jerseyType ? ' · ' + product.jerseyType.toUpperCase() + ' VERSION' : ''}</div>
+    <div class="pdp-brand-cat">
+      ${product.brand||''} · ${(product.category||'').toUpperCase()}
+      ${product.jerseyType?' · '+product.jerseyType.toUpperCase()+' VERSION':''}
+    </div>
     <h1 class="pdp-name">${product.name}</h1>
-
     <div class="pdp-rating-row">
       <span class="pdp-stars">${'★'.repeat(Math.round(product.rating||5))}</span>
-      <span class="pdp-rating-val">${product.rating || '5.0'}</span>
-      <span class="pdp-rating-count">(${product.reviews || 0} reviews)</span>
-      ${product.badge ? `<span class="pdp-badge ${badgeMap[product.badge]||''}">${product.badge.toUpperCase()}</span>` : ''}
+      <span class="pdp-rating-val">${product.rating||'5.0'}</span>
+      <span class="pdp-rating-count">(${product.reviews||0} reviews)</span>
+      ${product.badge?`<span class="pdp-badge ${badgeMap[product.badge]||''}">${product.badge.toUpperCase()}</span>`:''}
     </div>
 
     <div class="pdp-price-block">
-      <div class="pdp-price-current">₹${Number(product.price).toLocaleString('en-IN')}</div>
-      ${product.originalPrice ? `
+      <div class="pdp-price-current">₹${num(product.price)}</div>
+      ${product.originalPrice?`
       <div>
-        <div class="pdp-price-original">₹${Number(product.originalPrice).toLocaleString('en-IN')}</div>
-        ${disc > 0 ? `<div class="pdp-price-save">You save ₹${savings.toLocaleString('en-IN')} (${disc}% off)</div>` : ''}
-      </div>` : ''}
+        <div class="pdp-price-original">₹${num(product.originalPrice)}</div>
+        ${disc>0?`<div class="pdp-price-save">You save ₹${num(savings)} (${disc}% off)</div>`:''}
+      </div>`:''}
     </div>
 
-    ${isOOS ? `<div class="pdp-oos">❌ Out of Stock — Check back soon</div>` :
-      product.stock <= 8 ? `
-        <div class="pdp-urgency">
-          <div class="pdp-urgency-dot"></div>
-          <span class="pdp-urgency-text">Only ${product.stock} left in stock — order soon!</span>
-        </div>
-        <div class="stock-bar"><div class="stock-bar-fill" style="width:${stockPct}%"></div></div>` : ''}
+    ${isOOS
+      ? `<div class="pdp-oos">❌ Out of Stock — Check back soon</div>`
+      : product.stock<=8
+        ? `<div class="pdp-urgency"><div class="pdp-urgency-dot"></div><span class="pdp-urgency-text">Only ${product.stock} left in stock!</span></div>
+           <div class="stock-bar"><div class="stock-bar-fill" style="width:${stockPct}%"></div></div>`
+        : ''
+    }
 
-    <!-- Sizes -->
     <div style="margin-bottom:20px;">
-      <div class="pdp-section-label">
-        Select Size <span id="selected-size-display"></span>
-      </div>
+      <div class="pdp-section-label">Select Size <span id="selected-size-display"></span></div>
       <div class="size-grid">
-        ${(product.sizes||[]).map(s => `
-          <button class="size-btn${isOOS?' disabled':''}" ${isOOS?'disabled':''} onclick="selectSize('${s}',this)">${s}</button>
+        ${(product.sizes||[]).map(s=>`
+          <button class="size-btn" ${isOOS?'disabled':''} onclick="selectSize('${s}',this)">${s}</button>
         `).join('')}
       </div>
     </div>
 
-    <!-- Qty -->
-    ${!isOOS ? `
+    ${!isOOS?`
     <div class="pdp-qty-row">
       <span style="font-family:var(--font-fine);font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--silver);">Quantity:</span>
       <div class="pdp-qty">
@@ -911,160 +868,97 @@ function renderProduct(product) {
         <button class="pdp-qty-btn" onclick="changeQty(1)">+</button>
       </div>
     </div>
-
-    <!-- CTAs -->
     <div class="pdp-ctas">
       <button class="btn btn-green" style="flex:2;" onclick="addToCartPDP()">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 2.3c-.6.6-.2 1.7.7 1.7H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
         Add to Cart
       </button>
       <button class="btn btn-outline" style="flex:1;" onclick="buyNowPDP()">Buy Now</button>
-    </div>` : ''}
+    </div>`:''}
 
-    <!-- Trust pills -->
     <div class="pdp-trust-row">
-      <div class="pdp-trust-pill">
-        <div class="icon">📱</div>
-        <div class="label">UPI Payment</div>
-        <div class="sub">GPay · PhonePe</div>
-      </div>
-      <div class="pdp-trust-pill">
-        <div class="icon">🚚</div>
-        <div class="label">Fast Delivery</div>
-        <div class="sub">5–7 working days</div>
-      </div>
-      <div class="pdp-trust-pill">
-        <div class="icon">✅</div>
-        <div class="label">Authentic</div>
-        <div class="sub">Quality assured</div>
-      </div>
+      <div class="pdp-trust-pill"><div class="icon">📱</div><div class="label">UPI Payment</div><div class="sub">GPay · PhonePe</div></div>
+      <div class="pdp-trust-pill"><div class="icon">🚚</div><div class="label">Fast Delivery</div><div class="sub">5–7 working days</div></div>
+      <div class="pdp-trust-pill"><div class="icon">✅</div><div class="label">Authentic</div><div class="sub">Quality assured</div></div>
     </div>
 
-    <!-- Accordions -->
     <div class="pdp-accordions">
       <div class="acc-item open" id="acc-desc">
-        <div class="acc-header" onclick="toggleAcc('acc-desc')">
-          <span>Product Description</span>
-          <span class="acc-icon">▼</span>
-        </div>
-        <div class="acc-body">
-          <div class="acc-content">
-            <p>${product.description || 'Premium quality product from RN Sports Hub.'}</p>
-            ${product.features && product.features.length ? `
-            <ul style="margin-top:10px;">
-              ${product.features.map(f => `<li>${f}</li>`).join('')}
-            </ul>` : ''}
-          </div>
-        </div>
+        <div class="acc-header" onclick="toggleAcc('acc-desc')"><span>Product Description</span><span class="acc-icon">▼</span></div>
+        <div class="acc-body"><div class="acc-content">
+          <p>${product.description||'Premium quality product from RN Sports Hub.'}</p>
+          ${product.features?.length?`<ul style="margin-top:10px;">${product.features.map(f=>`<li>${f}</li>`).join('')}</ul>`:''}
+        </div></div>
       </div>
-
       <div class="acc-item" id="acc-size">
-        <div class="acc-header" onclick="toggleAcc('acc-size')">
-          <span>Size Guide &amp; Chart</span>
-          <span class="acc-icon">▼</span>
-        </div>
-        <div class="acc-body">
-          <div class="acc-content">
-            ${product.specs ? `
-            <div class="specs-grid" style="margin-bottom:14px;">
-              ${Object.entries(product.specs).map(([k,v]) => `
-                <div class="spec-item">
-                  <div class="spec-key">${k}</div>
-                  <div class="spec-val">${v}</div>
-                </div>`).join('')}
-            </div>` : ''}
-            ${getSizeChartHtml(product)}
-          </div>
-        </div>
+        <div class="acc-header" onclick="toggleAcc('acc-size')"><span>Size Guide &amp; Chart</span><span class="acc-icon">▼</span></div>
+        <div class="acc-body"><div class="acc-content">
+          ${product.specs?`<div class="specs-grid" style="margin-bottom:14px;">${Object.entries(product.specs).map(([k,v])=>`<div class="spec-item"><div class="spec-key">${k}</div><div class="spec-val">${v}</div></div>`).join('')}</div>`:''}
+          ${sizeChartHtml(product)}
+        </div></div>
       </div>
-
       <div class="acc-item" id="acc-delivery">
-        <div class="acc-header" onclick="toggleAcc('acc-delivery')">
-          <span>Delivery &amp; Payment</span>
-          <span class="acc-icon">▼</span>
-        </div>
-        <div class="acc-body">
-          <div class="acc-content">
-            <p><strong style="color:var(--green);">Delivery:</strong> 5–7 working days PAN India. Orders dispatched within 24 hours.</p>
-            <p><strong style="color:var(--green);">Payment:</strong> UPI only — GPay, PhonePe, Paytm, BHIM. Pay after placing order and upload your payment screenshot.</p>
-            <p><strong style="color:var(--red);">Returns:</strong> All sales are final. Products are non-returnable and non-refundable. Contact us on WhatsApp for any issues.</p>
-            <a href="https://wa.me/919123456780" target="_blank" class="btn btn-green btn-sm" style="display:inline-flex;align-items:center;gap:8px;margin-top:12px;">
-              💬 Contact on WhatsApp
-            </a>
-          </div>
-        </div>
+        <div class="acc-header" onclick="toggleAcc('acc-delivery')"><span>Delivery &amp; Payment</span><span class="acc-icon">▼</span></div>
+        <div class="acc-body"><div class="acc-content">
+          <p><strong style="color:var(--green);">Delivery:</strong> 5–7 working days PAN India.</p>
+          <p><strong style="color:var(--green);">Payment:</strong> UPI only — GPay, PhonePe, Paytm, BHIM.</p>
+          <p><strong style="color:var(--red);">Returns:</strong> All sales are final. Contact us on WhatsApp for queries.</p>
+          <a href="https://wa.me/919123456780" target="_blank" class="btn btn-green btn-sm" style="display:inline-flex;align-items:center;gap:8px;margin-top:12px;">💬 WhatsApp Us</a>
+        </div></div>
       </div>
     </div>
 
-    <!-- Share -->
     <div class="pdp-share-row">
       <span class="pdp-share-label">Share:</span>
-      <a href="https://wa.me/?text=${encodeURIComponent((product.name||'') + ' — RN Sports Hub: ' + window.location.href)}"
-        target="_blank" class="btn btn-ghost btn-sm">💬 WhatsApp</a>
+      <a href="https://wa.me/?text=${encodeURIComponent('Check this out — RN Sports Hub')}" target="_blank" class="btn btn-ghost btn-sm">💬 WhatsApp</a>
     </div>
   `;
 
-  // Show reviews + related sections
   document.getElementById('reviews-section').style.display = 'block';
   document.getElementById('related-section').style.display = 'block';
-
   loadReviews(product);
   loadRelated(product);
 }
 
-function getSizeChartHtml(product) {
-  const cat = (product.category || '').toLowerCase();
-  const brand = (product.brand || '').toLowerCase();
-  const isShoes = cat === 'studs' || cat.includes('shoe');
-  const isJersey = cat === 'jersey';
+// ---- HELPERS ----
+function num(n) { return Number(n).toLocaleString('en-IN'); }
+function cap(s) { return s ? s.charAt(0).toUpperCase()+s.slice(1) : ''; }
+
+function sizeChartHtml(product) {
+  const cat=(product.category||'').toLowerCase(), brand=(product.brand||'').toLowerCase();
+  const isShoes=cat==='studs'||cat.includes('shoe');
+  const isJersey=cat==='jersey';
   if (!isShoes && !isJersey) return '';
-
-  let src, alt;
+  let src,alt;
   if (isShoes) {
-    if (brand.includes('adidas')) { src = 'assets/images/size_chart/adidas_shoes_size_chart.png'; alt = 'Adidas Shoes Size Chart'; }
-    else if (brand.includes('mizuno')) { src = 'assets/images/size_chart/mizuno_shoes_size_chart.png'; alt = 'Mizuno Shoes Size Chart'; }
-    else { src = 'assets/images/size_chart/nike_shoes_size_chart.png'; alt = 'Shoes Size Chart'; }
-  } else {
-    src = 'assets/images/size_chart/jersey_size_chart.jpg'; alt = 'Jersey Size Chart';
-  }
-
-  return `
-    <div style="margin-top:8px;">
-      <div style="font-family:var(--font-fine);font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--green);margin-bottom:8px;">📏 Size Chart</div>
-      <div class="size-chart-wrap" onclick="openSizeChart('${src}','${alt}')">
-        <img src="${src}" alt="${alt}" class="size-chart-img" loading="lazy"
-          onerror="this.closest('.size-chart-wrap').style.display='none'"/>
-        <div class="size-chart-hint">🔍 Tap to expand</div>
-      </div>
-    </div>`;
+    if (brand.includes('adidas')) { src='assets/images/size_chart/adidas_shoes_size_chart.png'; alt='Adidas Size Chart'; }
+    else if (brand.includes('mizuno')) { src='assets/images/size_chart/mizuno_shoes_size_chart.png'; alt='Mizuno Size Chart'; }
+    else { src='assets/images/size_chart/nike_shoes_size_chart.png'; alt='Shoes Size Chart'; }
+  } else { src='assets/images/size_chart/jersey_size_chart.jpg'; alt='Jersey Size Chart'; }
+  return `<div style="margin-top:8px;">
+    <div style="font-family:var(--font-fine);font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--green);margin-bottom:8px;">📏 Size Chart</div>
+    <div class="size-chart-wrap" onclick="openSizeChart('${src}','${alt}')">
+      <img src="${src}" alt="${alt}" class="size-chart-img" loading="lazy" onerror="this.closest('.size-chart-wrap').style.display='none'"/>
+      <div class="size-chart-hint">🔍 Tap to expand</div>
+    </div></div>`;
 }
 
-// ---- REVIEWS ----
 function loadReviews(product) {
-  const grid = document.getElementById('reviews-grid');
-  const summary = document.getElementById('reviews-summary');
-
-  // Static reviews for now (will be from Firestore in backend phase)
   const staticReviews = [
-    { name: 'Rahul M., Mumbai', rating: 5, text: 'Amazing quality! Exactly as described. Fast delivery too.', date: '12 Mar 2025' },
-    { name: 'Arjun S., Delhi', rating: 5, text: 'The jersey looks and feels premium. Size chart was accurate.', date: '08 Mar 2025' },
-    { name: 'Priya K., Bangalore', rating: 4, text: 'Good product, packaging was solid. Would order again!', date: '02 Mar 2025' },
+    {name:'Rahul M., Mumbai',rating:5,text:'Amazing quality! Exactly as described. Fast delivery too.',date:'12 Mar 2025'},
+    {name:'Arjun S., Delhi',rating:5,text:'The jersey looks and feels premium. Size chart was accurate.',date:'08 Mar 2025'},
+    {name:'Priya K., Bangalore',rating:4,text:'Good product, packaging was solid. Would order again!',date:'02 Mar 2025'},
   ];
-
-  const avg = (staticReviews.reduce((s,r) => s+r.rating,0) / staticReviews.length).toFixed(1);
-
-  summary.innerHTML = `
+  const avg=(staticReviews.reduce((s,r)=>s+r.rating,0)/staticReviews.length).toFixed(1);
+  const colors=['var(--green)','#60A5FA','#F97316','#A78BFA'];
+  document.getElementById('reviews-summary').innerHTML=`
     <div style="font-family:var(--font-display);font-size:2.8rem;color:var(--green);line-height:1;">${avg}</div>
     <div style="color:#FBBF24;font-size:1rem;letter-spacing:2px;">★★★★★</div>
     <div style="font-family:var(--font-fine);font-size:12px;color:var(--silver);margin-top:2px;">${staticReviews.length} reviews</div>`;
-
-  const colors = ['var(--green)', '#60A5FA', '#F97316', '#A78BFA'];
-  grid.innerHTML = staticReviews.map((r, i) => `
+  document.getElementById('reviews-grid').innerHTML=staticReviews.map((r,i)=>`
     <div class="review-card-pdp">
       <div class="review-header">
-        <div class="review-avatar-circle" style="background:${colors[i%4]};">
-          ${r.name.charAt(0).toUpperCase()}
-        </div>
+        <div class="review-avatar-circle" style="background:${colors[i%4]};">${r.name.charAt(0)}</div>
         <div>
           <div style="font-family:var(--font-body);font-size:0.9rem;font-weight:700;">${r.name}</div>
           <div style="font-family:var(--font-fine);font-size:11px;color:var(--silver);">${r.date}</div>
@@ -1077,168 +971,152 @@ function loadReviews(product) {
 }
 
 function loadRelated(product) {
-  const related = window.getRelatedProducts ? window.getRelatedProducts(product, 4) : [];
-  const grid = document.getElementById('related-grid');
-  if (!related.length) {
-    document.getElementById('related-section').style.display = 'none';
-    return;
-  }
-  grid.innerHTML = related.map(p => window.buildProductCard(p)).join('');
+  const related = (window.getRelatedProducts?.(product,4)) || [];
+  if (!related.length) { document.getElementById('related-section').style.display='none'; return; }
+  const buildCard = window.buildProductCard || ((p)=>`<div onclick="window.location='product.html?id=${p.id}'">${p.name}</div>`);
+  document.getElementById('related-grid').innerHTML = related.map(p=>buildCard(p)).join('');
 }
 
-function showNoProduct() {
-  document.getElementById('pdp-skeleton').innerHTML = `
+function showNotFound() {
+  document.getElementById('pdp-skeleton').innerHTML=`
     <div style="grid-column:1/-1;text-align:center;padding:80px 20px;">
       <div style="font-size:48px;margin-bottom:16px;">🔍</div>
       <div style="font-family:var(--font-display);font-size:2rem;text-transform:uppercase;margin-bottom:8px;">Product Not Found</div>
-      <div style="font-family:var(--font-fine);font-size:14px;color:var(--silver);margin-bottom:24px;">The product you're looking for doesn't exist or was removed.</div>
       <a href="shop.html" class="btn btn-green">Browse All Products →</a>
     </div>`;
 }
 
-// ---- GALLERY CONTROLS ----
+// ---- GALLERY ----
 window.switchImg = function(i) {
-  imgIndex = i;
-  const imgs = currentProduct?.images || [];
-  const mainImg = document.getElementById('pdp-main-img');
-  mainImg.src = imgs[i];
-  document.querySelectorAll('.pdp-thumb').forEach((t, ti) => t.classList.toggle('active', ti === i));
+  imgIndex=i;
+  const img=document.getElementById('pdp-main-img');
+  img.src=(currentProduct?.images||[])[i]||'';
+  document.querySelectorAll('.pdp-thumb').forEach((t,ti)=>t.classList.toggle('active',ti===i));
 };
 window.prevImg = function() {
-  const n = currentProduct?.images?.length || 1;
-  window.switchImg((imgIndex - 1 + n) % n);
+  const n=currentProduct?.images?.length||1;
+  window.switchImg((imgIndex-1+n)%n);
 };
 window.nextImg = function() {
-  const n = currentProduct?.images?.length || 1;
-  window.switchImg((imgIndex + 1) % n);
+  const n=currentProduct?.images?.length||1;
+  window.switchImg((imgIndex+1)%n);
 };
 
 // ---- SIZE + QTY ----
-window.selectSize = function(size, btn) {
-  selectedSize = size;
-  document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+window.selectSize = function(size,btn) {
+  selectedSize=size;
+  document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('selected'));
   btn.classList.add('selected');
-  const d = document.getElementById('selected-size-display');
-  if (d) d.textContent = `— ${size}`;
+  const d=document.getElementById('selected-size-display');
+  if (d) d.textContent=`— ${size}`;
 };
 window.changeQty = function(delta) {
-  qty = Math.max(1, Math.min(10, qty + delta));
-  const d = document.getElementById('qty-display');
-  if (d) d.textContent = qty;
+  qty=Math.max(1,Math.min(10,qty+delta));
+  const d=document.getElementById('qty-display');
+  if (d) d.textContent=qty;
 };
 
-// ---- CART ACTIONS ----
+// ---- CART ----
 window.addToCartPDP = function() {
-  if (!selectedSize) { window.showToast?.('Please select a size first!', 'error'); return; }
-  if (window.cartAdd?.(currentProduct, selectedSize, qty)) window.openCart?.();
+  if (!selectedSize) { window.showToast?.('Please select a size first!','error'); return; }
+  if (window.cartAdd?.(currentProduct,selectedSize,qty)) window.openCart?.();
 };
 window.buyNowPDP = function() {
-  if (!selectedSize) { window.showToast?.('Please select a size first!', 'error'); return; }
-  window.cartAdd?.(currentProduct, selectedSize, qty);
-  window.location.href = 'checkout.html';
+  if (!selectedSize) { window.showToast?.('Please select a size first!','error'); return; }
+  window.cartAdd?.(currentProduct,selectedSize,qty);
+  window.location.href='checkout.html';
 };
 
 // ---- ACCORDION ----
 window.toggleAcc = function(id) {
-  const item = document.getElementById(id);
+  const item=document.getElementById(id);
   if (!item) return;
-  // Close others
-  document.querySelectorAll('.acc-item.open').forEach(el => {
-    if (el !== item) el.classList.remove('open');
-  });
+  document.querySelectorAll('.acc-item.open').forEach(el=>{ if(el!==item) el.classList.remove('open'); });
   item.classList.toggle('open');
 };
 
-// ---- REVIEW ----
+// ---- REVIEWS ----
 window.setRating = function(val) {
-  selectedRating = val;
-  const labels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
-  document.getElementById('star-hint').textContent = labels[val] || '';
-  document.querySelectorAll('.star-btn').forEach((b, i) => b.classList.toggle('active', i < val));
+  selectedRating=val;
+  const labels=['','Poor','Fair','Good','Very Good','Excellent'];
+  document.getElementById('star-hint').textContent=labels[val]||'';
+  document.querySelectorAll('.star-btn').forEach((b,i)=>b.classList.toggle('active',i<val));
 };
-
 window.submitReview = function() {
-  const name = document.getElementById('review-name').value.trim();
-  const text = document.getElementById('review-text').value.trim();
-  if (!name) { window.showToast?.('Please enter your name', 'error'); return; }
-  if (!selectedRating) { window.showToast?.('Please select a star rating', 'error'); return; }
-  if (text.length < 10) { window.showToast?.('Please write at least 10 characters', 'error'); return; }
-  // Will save to Firestore in backend phase
+  const name=document.getElementById('review-name').value.trim();
+  const text=document.getElementById('review-text').value.trim();
+  if (!name) { window.showToast?.('Please enter your name','error'); return; }
+  if (!selectedRating) { window.showToast?.('Please select a star rating','error'); return; }
+  if (text.length<10) { window.showToast?.('Please write at least 10 characters','error'); return; }
   window.showToast?.('Review submitted! Thank you 🙌');
-  document.getElementById('review-name').value = '';
-  document.getElementById('review-text').value = '';
+  document.getElementById('review-name').value='';
+  document.getElementById('review-text').value='';
   window.setRating(0);
 };
 
 // ---- LIGHTBOX ----
-let lboxImgs = [], lboxIdx = 0;
-
 window.openLightbox = function(startIdx) {
-  lboxImgs = currentProduct?.images || [];
+  lboxImgs=currentProduct?.images||[];
   if (!lboxImgs.length) return;
-  lboxIdx = startIdx || 0;
+  lboxIdx=startIdx||0;
   buildLboxThumbs();
   setLboxImg(lboxIdx);
   document.getElementById('img-lightbox').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow='hidden';
 };
-
 function setLboxImg(i) {
-  const n = lboxImgs.length;
-  lboxIdx = ((i % n) + n) % n;
-  const img = document.getElementById('lbox-img');
-  img.style.opacity = '0';
-  setTimeout(() => { img.src = lboxImgs[lboxIdx]; img.style.opacity = '1'; }, 100);
-  document.getElementById('lbox-counter').textContent = `${lboxIdx + 1} / ${n}`;
-  document.querySelectorAll('.lbox-thumb').forEach((t, ti) => t.classList.toggle('active', ti === lboxIdx));
+  const n=lboxImgs.length;
+  lboxIdx=((i%n)+n)%n;
+  const img=document.getElementById('lbox-img');
+  img.style.opacity='0';
+  setTimeout(()=>{ img.src=lboxImgs[lboxIdx]; img.style.opacity='1'; },120);
+  document.getElementById('lbox-counter').textContent=`${lboxIdx+1} / ${n}`;
+  document.querySelectorAll('.lbox-thumb').forEach((t,ti)=>t.classList.toggle('active',ti===lboxIdx));
 }
-
 function buildLboxThumbs() {
-  document.getElementById('lbox-thumbs').innerHTML = lboxImgs.map((src, i) => `
-    <div class="lbox-thumb ${i===0?'active':''}" onclick="setLboxImgPublic(${i})">
+  document.getElementById('lbox-thumbs').innerHTML=lboxImgs.map((src,i)=>`
+    <div class="lbox-thumb ${i===0?'active':''}" onclick="setLboxImgPub(${i})">
       <img src="${src}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=200&q=60'"/>
     </div>`).join('');
 }
-window.setLboxImgPublic = function(i) { setLboxImg(i); };
-
-document.getElementById('lbox-close').onclick = () => {
+window.setLboxImgPub=function(i){setLboxImg(i);};
+document.getElementById('lbox-close').onclick=()=>{
   document.getElementById('img-lightbox').classList.remove('open');
-  document.body.style.overflow = '';
+  document.body.style.overflow='';
 };
-document.getElementById('lbox-prev').onclick = (e) => { e.stopPropagation(); setLboxImg(lboxIdx - 1); };
-document.getElementById('lbox-next').onclick = (e) => { e.stopPropagation(); setLboxImg(lboxIdx + 1); };
-document.getElementById('img-lightbox').onclick = function(e) {
-  if (e.target === this) { this.classList.remove('open'); document.body.style.overflow = ''; }
+document.getElementById('lbox-prev').onclick=(e)=>{e.stopPropagation();setLboxImg(lboxIdx-1);};
+document.getElementById('lbox-next').onclick=(e)=>{e.stopPropagation();setLboxImg(lboxIdx+1);};
+document.getElementById('img-lightbox').onclick=function(e){
+  if(e.target===this){this.classList.remove('open');document.body.style.overflow='';}
 };
-
-// Keyboard + swipe
-let touchX = 0;
-document.addEventListener('keydown', e => {
-  if (!document.getElementById('img-lightbox').classList.contains('open')) return;
-  if (e.key === 'Escape') { document.getElementById('img-lightbox').classList.remove('open'); document.body.style.overflow = ''; }
-  if (e.key === 'ArrowLeft') setLboxImg(lboxIdx - 1);
-  if (e.key === 'ArrowRight') setLboxImg(lboxIdx + 1);
+let touchX=0;
+document.getElementById('img-lightbox').addEventListener('touchstart',e=>{touchX=e.touches[0].clientX;},{passive:true});
+document.getElementById('img-lightbox').addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-touchX;
+  if(Math.abs(dx)>50) setLboxImg(dx<0?lboxIdx+1:lboxIdx-1);
 });
-document.getElementById('img-lightbox').addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
-document.getElementById('img-lightbox').addEventListener('touchend', e => {
-  const dx = e.changedTouches[0].clientX - touchX;
-  if (Math.abs(dx) > 50) setLboxImg(dx < 0 ? lboxIdx + 1 : lboxIdx - 1);
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('img-lightbox').classList.contains('open')) return;
+  if(e.key==='Escape'){document.getElementById('img-lightbox').classList.remove('open');document.body.style.overflow='';}
+  if(e.key==='ArrowLeft') setLboxImg(lboxIdx-1);
+  if(e.key==='ArrowRight') setLboxImg(lboxIdx+1);
 });
 
 // ---- SIZE CHART MODAL ----
-window.openSizeChart = function(src, alt) {
-  document.getElementById('size-chart-img').src = src;
-  document.getElementById('size-chart-img').alt = alt;
+window.openSizeChart=function(src,alt){
+  document.getElementById('size-chart-img').src=src;
+  document.getElementById('size-chart-img').alt=alt;
   document.getElementById('size-chart-modal').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow='hidden';
 };
-window.closeSizeChart = function() {
+window.closeSizeChart=function(){
   document.getElementById('size-chart-modal').classList.remove('open');
-  document.body.style.overflow = '';
+  document.body.style.overflow='';
 };
-document.getElementById('size-chart-modal').onclick = function(e) {
-  if (e.target === this) window.closeSizeChart();
+document.getElementById('size-chart-modal').onclick=function(e){
+  if(e.target===this) window.closeSizeChart();
 };
 </script>
+
 </body>
 </html>

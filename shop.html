@@ -554,10 +554,16 @@
   </div>
 </footer>
 
-<script type="module" src="assets/js/cart.js"></script>
-<script type="module" src="assets/js/app.js"></script>
 <script type="module">
+// ============================================
+// SHOP PAGE — Single unified module
+// Imports everything it needs to avoid race conditions
+// ============================================
 import { fetchAllProducts } from './assets/js/products.js';
+
+// ---- Bootstrap cart + app ----
+import './assets/js/cart.js';
+import './assets/js/app.js';
 
 // ---- STATE ----
 let allProducts = [];
@@ -569,25 +575,21 @@ let isListView = false;
 
 // ---- INIT ----
 document.addEventListener('DOMContentLoaded', async () => {
+  // Load products — returns dummy data automatically if Firebase not set up
   allProducts = await fetchAllProducts();
-
-  // If no Firebase products, use dummy data
-  if (allProducts.length === 0) {
-    allProducts = getDummyProducts();
-  }
 
   // Read URL params
   const params = new URLSearchParams(window.location.search);
+
   if (params.get('cat')) {
     activeFilters.category = [params.get('cat')];
     tickFilterOption('category', params.get('cat'));
   }
   if (params.get('brand')) {
-    activeFilters.brand = [params.get('brand')];
-    tickFilterOption('brand', params.get('brand'));
+    activeFilters.brand = [params.get('brand').toLowerCase()];
+    tickFilterOption('brand', params.get('brand').toLowerCase());
   }
   if (params.get('q')) {
-    // Search mode — filter by name
     const q = params.get('q').toLowerCase();
     allProducts = allProducts.filter(p =>
       (p.name||'').toLowerCase().includes(q) ||
@@ -606,278 +608,240 @@ document.addEventListener('DOMContentLoaded', async () => {
   initSortSelect();
 });
 
-// ---- DUMMY PRODUCTS (until Firebase is set up) ----
-function getDummyProducts() {
-  const imgs = [
-    'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400&q=80',
-    'https://images.unsplash.com/photo-1614632537197-38a17061c2bd?w=400&q=80',
-    'https://images.unsplash.com/photo-1556906781-9a412961a28c?w=400&q=80',
-    'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=400&q=80',
-    'https://images.unsplash.com/photo-1624526267942-ab0ff8a3e972?w=400&q=80',
-  ];
-  const products = [];
-  const brands = ['nike','adidas','puma','mizuno'];
-  const categories = ['jersey','jersey','jersey','studs','gear'];
-  const names = [
-    'Fan Version Jersey','Player Version Jersey','Home Jersey','Away Jersey',
-    'Football Studs','Training Shoes','Football Gear Set','Goalkeeper Gloves',
-    'Shin Guards Set','Football Socks','Training Jersey','Match Jersey'
-  ];
-  for (let i = 0; i < 20; i++) {
-    products.push({
-      id: String(i+1),
-      name: names[i % names.length] + ' ' + (i+1),
-      category: categories[i % categories.length],
-      brand: brands[i % brands.length],
-      jerseyType: i % 2 === 0 ? 'fan' : 'player',
-      price: [599,799,999,1299,1499,1799][i%6],
-      originalPrice: [999,1299,1599,1999,2499,2799][i%6],
-      images: [imgs[i % imgs.length]],
-      sizes: ['S','M','L','XL'],
-      stock: i % 10 !== 0 ? 10 : 0,
-      featured: i < 4,
-      badge: ['new','hot','sale',null,null][i%5],
-    });
-  }
-  return products;
+// ---- PRODUCT CARD (self-contained, no window dependency) ----
+function buildCard(p) {
+  const disc = p.originalPrice && p.originalPrice > p.price
+    ? Math.round((1 - p.price / p.originalPrice) * 100) : 0;
+  const badgeHtml = p.badge
+    ? `<span class="product-card-badge badge-${p.badge}">${p.badge.toUpperCase()}</span>`
+    : disc ? `<span class="product-card-badge badge-sale">-${disc}%</span>` : '';
+  const sizesHtml = (p.sizes||[]).slice(0,4).map(s => `<span class="size-dot">${s}</span>`).join('');
+  const img = (p.images||[])[0] || 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400&q=60';
+  const oos = p.stock === 0;
+
+  return `
+    <div class="product-card" onclick="window.location='product.html?id=${p.id}'" style="${oos?'opacity:0.65':''}">
+      <div class="product-card-img-wrap">
+        ${badgeHtml}
+        ${oos ? `<span class="product-card-badge" style="background:var(--silver);color:var(--dark-1);top:auto;bottom:12px;">Out of Stock</span>` : ''}
+        <img src="${img}" alt="${p.name}" class="product-card-img" loading="lazy"
+          onerror="this.src='https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400&q=60'"/>
+        ${!oos ? `
+        <button class="product-card-quick" onclick="event.stopPropagation();quickAdd('${p.id}')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 2.3c-.6.6-.2 1.7.7 1.7H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+          Quick Add
+        </button>` : ''}
+      </div>
+      <div class="product-card-body">
+        <div class="product-card-cat">${p.category}${p.jerseyType?' · '+p.jerseyType:''}</div>
+        <div class="product-card-name">${p.name}</div>
+        <div class="product-card-prices">
+          <span class="product-card-price">₹${Number(p.price).toLocaleString('en-IN')}</span>
+          ${p.originalPrice?`<span class="product-card-original">₹${Number(p.originalPrice).toLocaleString('en-IN')}</span>`:''}
+        </div>
+        <div class="product-card-sizes">${sizesHtml}</div>
+      </div>
+    </div>`;
 }
 
-// ---- FILTER + SORT LOGIC ----
-function getFilteredProducts() {
-  let products = [...allProducts];
+function quickAdd(productId) {
+  const product = window.getProductById?.(productId);
+  if (!product) { window.showToast?.('Product not found.','error'); return; }
+  if (product.stock === 0) { window.showToast?.('Out of stock!','error'); return; }
+  const size = (product.sizes||['M'])[Math.min(1,(product.sizes||['M']).length-1)];
+  if (window.cartAdd?.(product, size, 1)) window.openCart?.();
+}
+window.quickAdd = quickAdd;
 
-  if (activeFilters.category.length > 0)
-    products = products.filter(p => activeFilters.category.includes(p.category));
-  if (activeFilters.brand.length > 0)
-    products = products.filter(p => activeFilters.brand.includes((p.brand||'').toLowerCase()));
-  if (activeFilters.jerseyType.length > 0)
-    products = products.filter(p => activeFilters.jerseyType.includes(p.jerseyType));
-  if (activeFilters.inStock.includes('true'))
-    products = products.filter(p => p.stock > 0);
-  if (activeFilters.priceMin !== null)
-    products = products.filter(p => p.price >= activeFilters.priceMin);
-  if (activeFilters.priceMax !== null)
-    products = products.filter(p => p.price <= activeFilters.priceMax);
-
-  // Sort
+// ---- FILTER + SORT ----
+function getFiltered() {
+  let list = [...allProducts];
+  if (activeFilters.category.length) list = list.filter(p => activeFilters.category.includes(p.category));
+  if (activeFilters.brand.length) list = list.filter(p => activeFilters.brand.includes((p.brand||'').toLowerCase()));
+  if (activeFilters.jerseyType.length) list = list.filter(p => activeFilters.jerseyType.includes(p.jerseyType));
+  if (activeFilters.inStock.includes('true')) list = list.filter(p => p.stock > 0);
+  if (activeFilters.priceMin !== null) list = list.filter(p => p.price >= activeFilters.priceMin);
+  if (activeFilters.priceMax !== null) list = list.filter(p => p.price <= activeFilters.priceMax);
   switch (currentSort) {
-    case 'price-asc':  products.sort((a,b) => a.price - b.price); break;
-    case 'price-desc': products.sort((a,b) => b.price - a.price); break;
-    case 'newest':     products.sort((a,b) => (b.createdAt||0) - (a.createdAt||0)); break;
-    case 'name':       products.sort((a,b) => (a.name||'').localeCompare(b.name||'')); break;
-    default: /* featured first */
-      products.sort((a,b) => (b.featured?1:0) - (a.featured?1:0)); break;
+    case 'price-asc':  list.sort((a,b) => a.price - b.price); break;
+    case 'price-desc': list.sort((a,b) => b.price - a.price); break;
+    case 'name':       list.sort((a,b) => (a.name||'').localeCompare(b.name||'')); break;
+    default: list.sort((a,b) => (b.featured?1:0)-(a.featured?1:0));
   }
-  return products;
+  return list;
 }
 
 function renderProducts() {
-  const filtered = getFilteredProducts();
+  const filtered = getFiltered();
   const total = filtered.length;
-  const totalPages = Math.ceil(total / PER_PAGE);
+  const totalPages = Math.ceil(total / PER_PAGE) || 1;
   if (currentPage > totalPages) currentPage = 1;
-  const start = (currentPage - 1) * PER_PAGE;
-  const paginated = filtered.slice(start, start + PER_PAGE);
+  const paginated = filtered.slice((currentPage-1)*PER_PAGE, currentPage*PER_PAGE);
 
   const grid = document.getElementById('products-grid');
   const countEl = document.getElementById('products-count');
+  countEl.textContent = `${total} product${total!==1?'s':''} found`;
 
-  countEl.textContent = total === 0 ? 'No products found' : `${total} product${total !== 1 ? 's' : ''} found`;
-
-  if (paginated.length === 0) {
+  if (!paginated.length) {
     grid.innerHTML = `
       <div class="shop-empty">
         <div class="shop-empty-icon">🔍</div>
         <div class="shop-empty-title">No Products Found</div>
-        <div class="shop-empty-sub">Try adjusting your filters or browse all products</div>
+        <div class="shop-empty-sub">Try adjusting your filters</div>
         <button onclick="clearAllFilters()" class="btn btn-outline btn-sm" style="margin-top:16px;">Clear Filters</button>
       </div>`;
     document.getElementById('pagination').innerHTML = '';
     return;
   }
 
-  grid.innerHTML = paginated.map(p => window.buildProductCard(p)).join('');
-  if (isListView) grid.classList.add('list-view');
-  else grid.classList.remove('list-view');
-
+  grid.innerHTML = paginated.map(p => buildCard(p)).join('');
+  if (isListView) grid.classList.add('list-view'); else grid.classList.remove('list-view');
   renderPagination(totalPages);
-  renderActiveFilterTags();
+  renderActiveTags();
 }
 
 function renderPagination(totalPages) {
   const el = document.getElementById('pagination');
   if (totalPages <= 1) { el.innerHTML = ''; return; }
   let html = `<button class="page-btn ${currentPage===1?'disabled':''}" onclick="goToPage(${currentPage-1})">‹</button>`;
-  for (let i = 1; i <= totalPages; i++) {
+  for (let i=1; i<=totalPages; i++)
     html += `<button class="page-btn ${i===currentPage?'active':''}" onclick="goToPage(${i})">${i}</button>`;
-  }
   html += `<button class="page-btn ${currentPage===totalPages?'disabled':''}" onclick="goToPage(${currentPage+1})">›</button>`;
   el.innerHTML = html;
 }
 
 window.goToPage = function(page) {
-  currentPage = page;
-  renderProducts();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  currentPage = page; renderProducts();
+  window.scrollTo({top:0,behavior:'smooth'});
 };
 
-// ---- FILTER EVENTS ----
+function renderActiveTags() {
+  const wrap = document.getElementById('active-filters-wrap');
+  const tags = [];
+  activeFilters.category.forEach(v => tags.push({label:'Category: '+v, filter:'category', value:v}));
+  activeFilters.brand.forEach(v => tags.push({label:'Brand: '+v, filter:'brand', value:v}));
+  activeFilters.jerseyType.forEach(v => tags.push({label:'Type: '+v, filter:'jerseyType', value:v}));
+  activeFilters.inStock.forEach(v => tags.push({label:'In Stock Only', filter:'inStock', value:v}));
+  if (activeFilters.priceMin!==null||activeFilters.priceMax!==null)
+    tags.push({label:`₹${activeFilters.priceMin||0}–₹${activeFilters.priceMax||'∞'}`,filter:'price',value:'price'});
+  wrap.innerHTML = tags.map(t =>
+    `<span class="active-filter-tag" onclick="removeFilter('${t.filter}','${t.value}')">${t.label} ✕</span>`
+  ).join('');
+}
+
 function initFilterEvents() {
   document.querySelectorAll('.filter-option').forEach(opt => {
     opt.addEventListener('click', () => {
-      const filter = opt.dataset.filter;
-      const value = opt.dataset.value;
+      const { filter, value } = opt.dataset;
       opt.classList.toggle('checked');
       const arr = activeFilters[filter];
       const idx = arr.indexOf(value);
-      if (idx === -1) arr.push(value);
-      else arr.splice(idx, 1);
-      currentPage = 1;
-      renderProducts();
+      if (idx===-1) arr.push(value); else arr.splice(idx,1);
+      currentPage=1; renderProducts();
     });
   });
-
-  document.getElementById('apply-price').addEventListener('click', () => {
+  document.getElementById('apply-price')?.addEventListener('click', () => {
     const min = parseFloat(document.getElementById('price-min').value);
     const max = parseFloat(document.getElementById('price-max').value);
-    activeFilters.priceMin = isNaN(min) ? null : min;
-    activeFilters.priceMax = isNaN(max) ? null : max;
-    currentPage = 1;
-    renderProducts();
+    activeFilters.priceMin = isNaN(min)?null:min;
+    activeFilters.priceMax = isNaN(max)?null:max;
+    currentPage=1; renderProducts();
   });
-
-  document.getElementById('clear-all-filters').addEventListener('click', clearAllFilters);
+  document.getElementById('clear-all-filters')?.addEventListener('click', clearAllFilters);
 }
 
 window.clearAllFilters = function() {
-  activeFilters = { category: [], brand: [], jerseyType: [], inStock: [], priceMin: null, priceMax: null };
-  document.querySelectorAll('.filter-option').forEach(o => o.classList.remove('checked'));
-  document.getElementById('price-min').value = '';
-  document.getElementById('price-max').value = '';
-  currentPage = 1;
-  renderProducts();
+  activeFilters = {category:[],brand:[],jerseyType:[],inStock:[],priceMin:null,priceMax:null};
+  document.querySelectorAll('.filter-option').forEach(o=>o.classList.remove('checked'));
+  document.getElementById('price-min').value='';
+  document.getElementById('price-max').value='';
+  currentPage=1; renderProducts();
+};
+
+window.removeFilter = function(filter, value) {
+  if (filter==='price') {
+    activeFilters.priceMin=null; activeFilters.priceMax=null;
+    document.getElementById('price-min').value='';
+    document.getElementById('price-max').value='';
+  } else {
+    const arr=activeFilters[filter], idx=arr.indexOf(value);
+    if (idx!==-1) arr.splice(idx,1);
+    document.querySelector(`.filter-option[data-filter="${filter}"][data-value="${value}"]`)?.classList.remove('checked');
+  }
+  currentPage=1; renderProducts();
 };
 
 function tickFilterOption(filter, value) {
-  const opt = document.querySelector(`.filter-option[data-filter="${filter}"][data-value="${value}"]`);
-  if (opt) opt.classList.add('checked');
+  document.querySelector(`.filter-option[data-filter="${filter}"][data-value="${value}"]`)?.classList.add('checked');
 }
-
-function renderActiveFilterTags() {
-  const wrap = document.getElementById('active-filters-wrap');
-  const tags = [];
-  activeFilters.category.forEach(v => tags.push({ label: 'Category: ' + v, filter: 'category', value: v }));
-  activeFilters.brand.forEach(v => tags.push({ label: 'Brand: ' + v, filter: 'brand', value: v }));
-  activeFilters.jerseyType.forEach(v => tags.push({ label: 'Type: ' + v, filter: 'jerseyType', value: v }));
-  activeFilters.inStock.forEach(v => tags.push({ label: 'In Stock', filter: 'inStock', value: v }));
-  if (activeFilters.priceMin !== null || activeFilters.priceMax !== null) {
-    tags.push({ label: `₹${activeFilters.priceMin||0} – ₹${activeFilters.priceMax||'∞'}`, filter: 'price', value: 'price' });
-  }
-  wrap.innerHTML = tags.length
-    ? tags.map(t => `<span class="active-filter-tag" onclick="removeFilter('${t.filter}','${t.value}')">
-        ${t.label} ✕
-      </span>`).join('')
-    : '';
-}
-
-window.removeFilter = function(filter, value) {
-  if (filter === 'price') {
-    activeFilters.priceMin = null; activeFilters.priceMax = null;
-    document.getElementById('price-min').value = '';
-    document.getElementById('price-max').value = '';
-  } else {
-    const arr = activeFilters[filter];
-    const idx = arr.indexOf(value);
-    if (idx !== -1) arr.splice(idx, 1);
-    const opt = document.querySelector(`.filter-option[data-filter="${filter}"][data-value="${value}"]`);
-    if (opt) opt.classList.remove('checked');
-  }
-  currentPage = 1;
-  renderProducts();
-};
 
 function updateShopTitle() {
   const params = new URLSearchParams(window.location.search);
-  const cat = params.get('cat');
-  const brand = params.get('brand');
+  const cat = params.get('cat'), brand = params.get('brand');
   const titleEl = document.getElementById('shop-page-title');
   const breadEl = document.getElementById('shop-breadcrumb');
   if (cat) {
-    const labels = { jersey: 'Jerseys', studs: 'Studs & Shoes', gear: 'Football Gear' };
-    titleEl.innerHTML = `Shop <span>${labels[cat] || cat}</span>`;
-    breadEl.textContent = labels[cat] || cat;
+    const labels={jersey:'Jerseys',studs:'Studs & Shoes',gear:'Football Gear'};
+    titleEl.innerHTML=`Shop <span>${labels[cat]||cat}</span>`;
+    breadEl.textContent=labels[cat]||cat;
   } else if (brand) {
-    titleEl.innerHTML = `Shop <span>${brand.charAt(0).toUpperCase()+brand.slice(1)}</span>`;
-    breadEl.textContent = brand.charAt(0).toUpperCase()+brand.slice(1);
+    const b=brand.charAt(0).toUpperCase()+brand.slice(1);
+    titleEl.innerHTML=`Shop <span>${b}</span>`; breadEl.textContent=b;
   }
 }
 
-// ---- SORT ----
 function initSortSelect() {
-  document.getElementById('sort-select').addEventListener('change', function() {
-    currentSort = this.value;
-    currentPage = 1;
-    renderProducts();
+  document.getElementById('sort-select')?.addEventListener('change', function() {
+    currentSort=this.value; currentPage=1; renderProducts();
   });
 }
 
-// ---- VIEW TOGGLE ----
 function initViewToggle() {
-  document.getElementById('grid-view-btn').addEventListener('click', () => {
-    isListView = false;
+  document.getElementById('grid-view-btn')?.addEventListener('click', () => {
+    isListView=false;
     document.getElementById('grid-view-btn').classList.add('active');
     document.getElementById('list-view-btn').classList.remove('active');
     document.getElementById('products-grid').classList.remove('list-view');
   });
-  document.getElementById('list-view-btn').addEventListener('click', () => {
-    isListView = true;
+  document.getElementById('list-view-btn')?.addEventListener('click', () => {
+    isListView=true;
     document.getElementById('list-view-btn').classList.add('active');
     document.getElementById('grid-view-btn').classList.remove('active');
     document.getElementById('products-grid').classList.add('list-view');
   });
 }
 
-// ---- MOBILE FILTER DRAWER ----
 function initMobileFilter() {
-  const btn = document.getElementById('mobile-filter-toggle');
-  const overlay = document.getElementById('filter-drawer-overlay');
-  const drawer = document.getElementById('filter-drawer');
-  const drawerInner = document.getElementById('filter-drawer-inner');
-
+  const btn=document.getElementById('mobile-filter-toggle');
+  const overlay=document.getElementById('filter-drawer-overlay');
+  const drawer=document.getElementById('filter-drawer');
+  const drawerInner=document.getElementById('filter-drawer-inner');
+  if (!btn) return;
   btn.addEventListener('click', () => {
-    // Clone sidebar filters into drawer
     drawerInner.innerHTML = document.getElementById('filter-sidebar').innerHTML;
-    overlay.classList.add('open');
-    drawer.classList.add('open');
-    document.body.style.overflow = 'hidden';
-    // Re-attach events to cloned elements
+    overlay.classList.add('open'); drawer.classList.add('open');
+    document.body.style.overflow='hidden';
     drawerInner.querySelectorAll('.filter-option').forEach(opt => {
-      const filter = opt.dataset.filter;
-      const value = opt.dataset.value;
-      if (activeFilters[filter] && activeFilters[filter].includes(value)) opt.classList.add('checked');
+      const {filter,value}=opt.dataset;
+      if (activeFilters[filter]?.includes(value)) opt.classList.add('checked');
       opt.addEventListener('click', () => {
         opt.classList.toggle('checked');
-        const arr = activeFilters[filter];
-        const idx = arr.indexOf(value);
-        if (idx === -1) arr.push(value); else arr.splice(idx, 1);
-        currentPage = 1; renderProducts();
+        const arr=activeFilters[filter], idx=arr.indexOf(value);
+        if (idx===-1) arr.push(value); else arr.splice(idx,1);
+        currentPage=1; renderProducts();
       });
     });
   });
-
-  const closeDrawer = () => {
-    overlay.classList.remove('open');
-    drawer.classList.remove('open');
-    document.body.style.overflow = '';
-  };
-  overlay.addEventListener('click', closeDrawer);
+  const close=()=>{overlay.classList.remove('open');drawer.classList.remove('open');document.body.style.overflow='';};
+  overlay.addEventListener('click', close);
 }
 
-// ---- FILTER GROUP TOGGLE ----
 window.toggleFilterGroup = function(id) {
-  const group = document.getElementById(id);
-  if (group) group.classList.toggle('open');
+  document.getElementById(id)?.classList.toggle('open');
 };
 </script>
+
 </body>
 </html>
