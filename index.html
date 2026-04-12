@@ -1,553 +1,581 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TheSecondWave — Premium Streetwear</title>
-  <meta name="description" content="Redefine streetwear. Premium jerseys & everyday essentials by TheSecondWave.">
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RN Sports Hub — Premium Football Jerseys, Studs & Gear India</title>
+  <meta name="description" content="India's top destination for football jerseys, player kits, studs and gear. Fan & Player versions. Fast delivery. Pay via UPI."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/css/style.css"/>
 </head>
 <body>
 
-<!-- PAGE LOADER -->
-<div id="page-loader">
-  <div class="loader-logo">THE SECOND WAVE</div>
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span class="ticker-item">⚽ Fan &amp; Player Version Jerseys</span>
+    <span class="ticker-item">🚚 Fast Delivery PAN India</span>
+    <span class="ticker-item">📦 5–7 Working Days</span>
+    <span class="ticker-item">📱 Pay via UPI</span>
+    <span class="ticker-item">✅ 100% Authentic Quality</span>
+    <span class="ticker-item">⚽ Fan &amp; Player Version Jerseys</span>
+    <span class="ticker-item">🚚 Fast Delivery PAN India</span>
+    <span class="ticker-item">📦 5–7 Working Days</span>
+    <span class="ticker-item">📱 Pay via UPI</span>
+    <span class="ticker-item">✅ 100% Authentic Quality</span>
+  </div>
 </div>
 
 <!-- NAVBAR -->
 <nav id="navbar">
-  <div class="container">
-    <div class="nav-inner">
-      <a href="index.html" class="nav-logo">THE<span>SECOND</span>WAVE</a>
-
-      <ul class="nav-links">
-        <li><a href="shop.html">Shop All</a></li>
-        <li><a href="shop.html?cat=jerseys">Jerseys</a></li>
-        <li><a href="shop.html?cat=tees">T-Shirts</a></li>
-        <li><a href="shop.html?cat=essentials">Essentials</a></li>
-        <li><a href="#about">About</a></li>
-      </ul>
-
-      <div class="nav-actions">
-        <button class="nav-icon-btn" aria-label="Search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        </button>
-        <button class="nav-icon-btn" aria-label="Wishlist">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-        </button>
-        <button class="nav-icon-btn" aria-label="Cart" data-cart-open>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-          <span class="cart-count">0</span>
-        </button>
-        <button class="hamburger" aria-label="Menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
+  <div class="nav-inner">
+    <div class="nav-left">
+      <button id="hamburger" class="nav-icon-btn" aria-label="Menu">
+        <div class="hamburger-lines"><span></span><span></span><span></span></div>
+      </button>
+      <div class="nav-search">
+        <svg class="nav-search-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input type="text" id="nav-search-input" placeholder="Search jerseys, studs, gear..." autocomplete="off"/>
+        <div id="search-results-dropdown"></div>
       </div>
+    </div>
+
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-text">
+        <span class="brand-top">RN Sports</span>
+        <span class="brand-sub">Hub</span>
+      </div>
+    </a>
+
+    <div class="nav-right">
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+        <a href="tracking.html" class="nav-link">Track</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+      <button id="mobile-search-btn" class="nav-icon-btn mobile-search-trigger" aria-label="Search">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="18" height="18">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+      </button>
+      <button class="nav-icon-btn" data-cart-trigger aria-label="Cart">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" width="20" height="20">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 2.3c-.6.6-.2 1.7.7 1.7H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+        </svg>
+        <span class="cart-badge" style="display:none;">0</span>
+      </button>
     </div>
   </div>
 </nav>
 
 <!-- MOBILE NAV -->
-<div class="mobile-nav">
-  <ul>
-    <li><a href="shop.html">Shop All</a></li>
-    <li><a href="shop.html?cat=jerseys">Jerseys</a></li>
-    <li><a href="shop.html?cat=tees">T-Shirts</a></li>
-    <li><a href="shop.html?cat=essentials">Essentials</a></li>
-    <li><a href="#about">About</a></li>
-  </ul>
+<div id="mobile-nav">
+  <div class="mobile-nav-links">
+    <a href="index.html" class="mobile-nav-link">🏠&nbsp; Home</a>
+    <a href="shop.html" class="mobile-nav-link">⚽&nbsp; Shop</a>
+    <a href="tracking.html" class="mobile-nav-link">📦&nbsp; Track Order</a>
+    <a href="about.html" class="mobile-nav-link">ℹ️&nbsp; About Us</a>
+    <a href="contact.html" class="mobile-nav-link">📞&nbsp; Contact</a>
+    <a href="how-it-work.html" class="mobile-nav-link">❓&nbsp; How It Works</a>
+  </div>
+</div>
+<div id="mobile-nav-backdrop"></div>
+
+<!-- MOBILE SEARCH OVERLAY -->
+<div id="mobile-search-overlay" role="dialog" aria-modal="true" aria-label="Search">
+  <div id="mobile-search-box">
+    <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border);">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16" height="16" style="color:var(--silver);flex-shrink:0;">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      </svg>
+      <input type="search" id="mobile-search-input" placeholder="Search jerseys, studs..." autocomplete="off"
+        style="flex:1;background:transparent;border:none;outline:none;font-size:16px;color:var(--off-white);font-family:var(--font-body);"/>
+      <button id="mobile-search-close" style="background:none;border:none;color:var(--silver);cursor:pointer;padding:4px;font-size:20px;line-height:1;">&#10005;</button>
+    </div>
+    <div id="mobile-search-dropdown"></div>
+  </div>
 </div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-visual">
-    <img class="hero-img"
-      src="https://images.unsplash.com/photo-1552346154-21d32810aba3?w=1200&q=90&fit=crop"
-      alt="Streetwear lifestyle" />
-  </div>
-  <div class="container" style="position:relative;z-index:2;">
-    <div class="hero-content">
-      <div class="hero-eyebrow">SS '25 Collection</div>
-      <h1 class="hero-title">Rede<em>fine</em><br>Street&shy;wear</h1>
-      <p class="hero-sub">Premium jerseys & everyday essentials crafted for those who move differently.</p>
-      <div class="hero-actions">
-        <a href="shop.html" class="btn-primary">
-          <span>Explore Collection</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+<!-- ======= HERO ======= -->
+<section class="hero" id="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-bg-glow"></div>
+  <div class="hero-noise"></div>
+  <div id="hero-slider" style="position:absolute;inset:0;z-index:1;"></div>
+  <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(to right, rgba(8,11,15,0.97) 0%, rgba(8,11,15,0.85) 50%, rgba(8,11,15,0.4) 100%);"></div>
+
+  <div class="container" style="position:relative;z-index:2;width:100%;">
+    <div class="hero-content animate-fade-up">
+      <div class="hero-eyebrow">
+        <span class="tag">⚽ Official Football Store</span>
+      </div>
+      <h1 class="hero-title">
+        <span class="line-stroke">Play Like</span>
+        <span class="line-green">Champions</span>
+        <span>Dress Like One</span>
+      </h1>
+      <p class="hero-desc">
+        Fan &amp; Player version jerseys, football studs and premium gear — delivered across India. 
+        Authentic quality, fast shipping, UPI payment.
+      </p>
+      <div class="hero-ctas animate-fade-up delay-2">
+        <a href="shop.html" class="btn btn-green">
+          Shop Now
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
         </a>
-        <a href="#categories" class="btn-ghost">
-          View Categories
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+        <a href="how-it-work.html" class="btn btn-ghost">How It Works</a>
+      </div>
+
+      <div class="hero-stats animate-fade-up delay-3">
+        <div>
+          <div class="hero-stat-num">150<span>+</span></div>
+          <div class="hero-stat-label">Products</div>
+        </div>
+        <div style="width:1px;height:40px;background:var(--border);"></div>
+        <div>
+          <div class="hero-stat-num">5–7<span>d</span></div>
+          <div class="hero-stat-label">Delivery</div>
+        </div>
+        <div style="width:1px;height:40px;background:var(--border);"></div>
+        <div>
+          <div class="hero-stat-num">100<span>%</span></div>
+          <div class="hero-stat-label">Authentic</div>
+        </div>
+        <div style="width:1px;height:40px;background:var(--border);"></div>
+        <div>
+          <div class="hero-stat-num">UPI</div>
+          <div class="hero-stat-label">Payment</div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="hero-scroll">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
-  </div>
 </section>
 
-<!-- MARQUEE -->
-<div class="marquee-strip">
-  <div class="marquee-track">
-    <!-- duplicated for seamless loop -->
-    <span class="marquee-item">Premium Quality <span class="marquee-dot"></span></span>
-    <span class="marquee-item">Football Jerseys <span class="marquee-dot"></span></span>
-    <span class="marquee-item">Cricket Essentials <span class="marquee-dot"></span></span>
-    <span class="marquee-item">Free Shipping ₹999+ <span class="marquee-dot"></span></span>
-    <span class="marquee-item">Streetwear Redefined <span class="marquee-dot"></span></span>
-    <span class="marquee-item">New Arrivals Weekly <span class="marquee-dot"></span></span>
-    <span class="marquee-item">Premium Quality <span class="marquee-dot"></span></span>
-    <span class="marquee-item">Football Jerseys <span class="marquee-dot"></span></span>
-    <span class="marquee-item">Cricket Essentials <span class="marquee-dot"></span></span>
-    <span class="marquee-item">Free Shipping ₹999+ <span class="marquee-dot"></span></span>
-    <span class="marquee-item">Streetwear Redefined <span class="marquee-dot"></span></span>
-    <span class="marquee-item">New Arrivals Weekly <span class="marquee-dot"></span></span>
-  </div>
-</div>
-
-<!-- FEATURED PRODUCTS -->
-<section class="featured-section">
+<!-- TRUST BAR -->
+<div style="background:var(--dark-2);border-bottom:1px solid var(--border);">
   <div class="container">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-label">Handpicked</div>
-        <h2 class="section-title">Featured <em>Pieces</em></h2>
-      </div>
-      <a href="shop.html" class="btn-ghost">
-        View All
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-
-    <div class="products-grid">
-
-      <!-- Card 1 -->
-      <div class="product-card reveal" onclick="window.location='product.html'">
-        <div class="product-card-media">
-          <img class="product-card-img"
-            src="https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=600&q=80&fit=crop"
-            alt="Classic Jersey">
-          <img class="product-card-img-hover"
-            src="https://images.unsplash.com/photo-1604671801908-6f0c6a092c05?w=600&q=80&fit=crop"
-            alt="Classic Jersey Back">
-          <span class="product-card-badge new">New</span>
-          <div class="product-card-actions">
-            <button class="product-action-btn" data-wishlist aria-label="Wishlist">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-            </button>
-            <button class="product-action-btn" data-add-cart aria-label="Add to cart">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-            </button>
-          </div>
-        </div>
-        <div class="product-card-info">
-          <div class="product-card-category">Football Jersey</div>
-          <div class="product-card-name">Wave Classic Home Kit</div>
-          <div class="product-card-footer">
-            <div><span class="product-price">₹1,299</span></div>
-            <div class="product-rating"><span class="stars">★★★★★</span> (24)</div>
-          </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;">
+      <div class="trust-item reveal">
+        <div class="trust-icon">🚀</div>
+        <div>
+          <div class="trust-title">Fast Delivery</div>
+          <div class="trust-desc">5–7 days PAN India</div>
         </div>
       </div>
-
-      <!-- Card 2 -->
-      <div class="product-card reveal reveal-delay-1" onclick="window.location='product.html'">
-        <div class="product-card-media">
-          <img class="product-card-img"
-            src="https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=600&q=80&fit=crop"
-            alt="Oversized Tee">
-          <img class="product-card-img-hover"
-            src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&q=80&fit=crop"
-            alt="Tee Back">
-          <span class="product-card-badge sale">−20%</span>
-          <div class="product-card-actions">
-            <button class="product-action-btn" data-wishlist aria-label="Wishlist">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-            </button>
-            <button class="product-action-btn" data-add-cart aria-label="Add to cart">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-            </button>
-          </div>
-        </div>
-        <div class="product-card-info">
-          <div class="product-card-category">T-Shirt</div>
-          <div class="product-card-name">Oversized Wave Tee</div>
-          <div class="product-card-footer">
-            <div><span class="product-price">₹799</span><span class="product-price-old">₹999</span></div>
-            <div class="product-rating"><span class="stars">★★★★☆</span> (18)</div>
-          </div>
+      <div class="trust-item reveal delay-1">
+        <div class="trust-icon">🛡️</div>
+        <div>
+          <div class="trust-title">100% Authentic</div>
+          <div class="trust-desc">Genuine gear only</div>
         </div>
       </div>
-
-      <!-- Card 3 -->
-      <div class="product-card reveal reveal-delay-2" onclick="window.location='product.html'">
-        <div class="product-card-media">
-          <img class="product-card-img"
-            src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=600&q=80&fit=crop"
-            alt="Cricket Jersey">
-          <img class="product-card-img-hover"
-            src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=600&q=80&fit=crop"
-            alt="Cricket Jersey 2">
-          <span class="product-card-badge new">New</span>
-          <div class="product-card-actions">
-            <button class="product-action-btn" data-wishlist aria-label="Wishlist">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-            </button>
-            <button class="product-action-btn" data-add-cart aria-label="Add to cart">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-            </button>
-          </div>
-        </div>
-        <div class="product-card-info">
-          <div class="product-card-category">Cricket Jersey</div>
-          <div class="product-card-name">Pro Cricket Elite Set</div>
-          <div class="product-card-footer">
-            <div><span class="product-price">₹1,599</span></div>
-            <div class="product-rating"><span class="stars">★★★★★</span> (31)</div>
-          </div>
+      <div class="trust-item reveal delay-2">
+        <div class="trust-icon">📱</div>
+        <div>
+          <div class="trust-title">UPI Payment</div>
+          <div class="trust-desc">GPay · PhonePe · Paytm</div>
         </div>
       </div>
-
-      <!-- Card 4 -->
-      <div class="product-card reveal" onclick="window.location='product.html'">
-        <div class="product-card-media">
-          <img class="product-card-img"
-            src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80&fit=crop"
-            alt="Hoodie">
-          <img class="product-card-img-hover"
-            src="https://images.unsplash.com/photo-1614251056798-0a63eda2bb25?w=600&q=80&fit=crop"
-            alt="Hoodie 2">
-          <div class="product-card-actions">
-            <button class="product-action-btn" data-wishlist aria-label="Wishlist">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-            </button>
-            <button class="product-action-btn" data-add-cart aria-label="Add to cart">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-            </button>
-          </div>
-        </div>
-        <div class="product-card-info">
-          <div class="product-card-category">Essentials</div>
-          <div class="product-card-name">Street Fleece Hoodie</div>
-          <div class="product-card-footer">
-            <div><span class="product-price">₹1,899</span></div>
-            <div class="product-rating"><span class="stars">★★★★★</span> (42)</div>
-          </div>
+      <div class="trust-item reveal delay-3">
+        <div class="trust-icon">🎧</div>
+        <div>
+          <div class="trust-title">WhatsApp Support</div>
+          <div class="trust-desc">Help whenever you need</div>
         </div>
       </div>
-
-      <!-- Card 5 -->
-      <div class="product-card reveal reveal-delay-1" onclick="window.location='product.html'">
-        <div class="product-card-media">
-          <img class="product-card-img"
-            src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80&fit=crop"
-            alt="Away Jersey">
-          <img class="product-card-img-hover"
-            src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=600&q=80&fit=crop"
-            alt="Away Jersey 2">
-          <span class="product-card-badge">Limited</span>
-          <div class="product-card-actions">
-            <button class="product-action-btn" data-wishlist aria-label="Wishlist">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-            </button>
-            <button class="product-action-btn" data-add-cart aria-label="Add to cart">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-            </button>
-          </div>
-        </div>
-        <div class="product-card-info">
-          <div class="product-card-category">Football Jersey</div>
-          <div class="product-card-name">Away Kit – Midnight</div>
-          <div class="product-card-footer">
-            <div><span class="product-price">₹1,399</span></div>
-            <div class="product-rating"><span class="stars">★★★★☆</span> (15)</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 6 -->
-      <div class="product-card reveal reveal-delay-2" onclick="window.location='product.html'">
-        <div class="product-card-media">
-          <img class="product-card-img"
-            src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&q=80&fit=crop"
-            alt="Graphic Tee">
-          <img class="product-card-img-hover"
-            src="https://images.unsplash.com/photo-1562157873-818bc0726f68?w=600&q=80&fit=crop"
-            alt="Graphic Tee 2">
-          <span class="product-card-badge new">New</span>
-          <div class="product-card-actions">
-            <button class="product-action-btn" data-wishlist aria-label="Wishlist">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-            </button>
-            <button class="product-action-btn" data-add-cart aria-label="Add to cart">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-            </button>
-          </div>
-        </div>
-        <div class="product-card-info">
-          <div class="product-card-category">T-Shirt</div>
-          <div class="product-card-name">Archive Graphic Tee</div>
-          <div class="product-card-footer">
-            <div><span class="product-price">₹849</span></div>
-            <div class="product-rating"><span class="stars">★★★★★</span> (37)</div>
-          </div>
-        </div>
-      </div>
-
     </div>
   </div>
-</section>
+</div>
+
+<!-- BRANDS STRIP -->
+<div class="brands-strip">
+  <div class="brands-track">
+    <span class="brand-logo">Nike</span>
+    <span class="brand-logo">Adidas</span>
+    <span class="brand-logo">Puma</span>
+    <span class="brand-logo">Mizuno</span>
+    <span class="brand-logo">Under Armour</span>
+    <span class="brand-logo">New Balance</span>
+    <span class="brand-logo">Umbro</span>
+    <span class="brand-logo">Joma</span>
+    <!-- duplicate for infinite loop -->
+    <span class="brand-logo">Nike</span>
+    <span class="brand-logo">Adidas</span>
+    <span class="brand-logo">Puma</span>
+    <span class="brand-logo">Mizuno</span>
+    <span class="brand-logo">Under Armour</span>
+    <span class="brand-logo">New Balance</span>
+    <span class="brand-logo">Umbro</span>
+    <span class="brand-logo">Joma</span>
+  </div>
+</div>
 
 <!-- CATEGORIES -->
-<section class="categories-section" id="categories">
+<section class="section">
   <div class="container">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-label">Browse By</div>
-        <h2 class="section-title">Shop <em>Categories</em></h2>
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:36px;flex-wrap:wrap;">
+      <div class="reveal">
+        <div class="tag" style="margin-bottom:12px;">Shop by Category</div>
+        <h2 class="section-heading">Browse Our<br><span>Collections</span></h2>
       </div>
+      <a href="shop.html" class="btn btn-outline btn-sm reveal delay-1">View All Products →</a>
     </div>
+
     <div class="categories-grid">
-
-      <a href="shop.html?cat=tees" class="category-card reveal">
-        <img src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=700&q=85&fit=crop" alt="T-Shirts">
-        <div class="category-overlay">
-          <div class="cat-label">Category</div>
-          <div class="cat-title">T-Shirts</div>
-          <div class="cat-cta">Shop Now →</div>
+      <!-- Big card -->
+      <a href="shop.html?cat=jersey" class="cat-card reveal">
+        <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=700&q=80"
+          alt="Jerseys" class="cat-card-img" loading="lazy"/>
+        <div class="cat-card-overlay"></div>
+        <div class="cat-card-content">
+          <div class="cat-card-label">Fan &amp; Player Versions</div>
+          <div class="cat-card-name">Football Jerseys</div>
+          <div class="cat-card-count">Shop jerseys →</div>
+        </div>
+        <div class="cat-card-arrow">
+          <svg width="16" height="16" fill="none" stroke="#080B0F" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
         </div>
       </a>
 
-      <a href="shop.html?cat=football" class="category-card reveal reveal-delay-1">
-        <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=700&q=85&fit=crop" alt="Football Jerseys">
-        <div class="category-overlay">
-          <div class="cat-label">Category</div>
-          <div class="cat-title">Football Jerseys</div>
-          <div class="cat-cta">Shop Now →</div>
+      <!-- Small cards -->
+      <a href="shop.html?cat=studs" class="cat-card reveal delay-1">
+        <img src="https://images.unsplash.com/photo-1556906781-9a412961a28c?w=600&q=80"
+          alt="Studs" class="cat-card-img" loading="lazy"/>
+        <div class="cat-card-overlay"></div>
+        <div class="cat-card-content">
+          <div class="cat-card-label">Football Footwear</div>
+          <div class="cat-card-name">Studs &amp; Shoes</div>
+        </div>
+        <div class="cat-card-arrow">
+          <svg width="16" height="16" fill="none" stroke="#080B0F" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
         </div>
       </a>
 
-      <a href="shop.html?cat=cricket" class="category-card reveal reveal-delay-2">
-        <img src="https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=700&q=85&fit=crop" alt="Cricket Jerseys">
-        <div class="category-overlay">
-          <div class="cat-label">Category</div>
-          <div class="cat-title">Cricket Jerseys</div>
-          <div class="cat-cta">Shop Now →</div>
+      <a href="shop.html?cat=gear" class="cat-card reveal delay-2">
+        <img src="https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=600&q=80"
+          alt="Gear" class="cat-card-img" loading="lazy"/>
+        <div class="cat-card-overlay"></div>
+        <div class="cat-card-content">
+          <div class="cat-card-label">Training &amp; Match</div>
+          <div class="cat-card-name">Football Gear</div>
+        </div>
+        <div class="cat-card-arrow">
+          <svg width="16" height="16" fill="none" stroke="#080B0F" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
         </div>
       </a>
-
     </div>
   </div>
 </section>
 
-<!-- NEW ARRIVALS SCROLL -->
-<section class="arrivals-section">
+<!-- FEATURED PRODUCTS -->
+<section class="section" style="padding-top:0;">
   <div class="container">
-    <div class="section-header reveal">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:36px;flex-wrap:wrap;">
+      <div class="reveal">
+        <div class="tag" style="margin-bottom:12px;">Hand-picked</div>
+        <h2 class="section-heading">Featured<br><span>Products</span></h2>
+      </div>
+      <a href="shop.html" class="btn btn-outline btn-sm reveal delay-1">Shop All →</a>
+    </div>
+    <div class="products-grid reveal" id="featured-products-grid">
+      <!-- Products injected by JS -->
+      <div style="grid-column:1/-1;text-align:center;padding:60px 0;color:var(--silver);font-family:var(--font-fine);font-size:14px;">
+        Loading products...
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS STRIP -->
+<section class="section-sm" style="background:var(--dark-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:40px;" class="reveal">
+      <div class="tag" style="margin:0 auto 12px;">Simple Process</div>
+      <h2 class="section-heading">How It <span>Works</span></h2>
+    </div>
+    <div class="steps-row">
+      <div class="step-item reveal">
+        <div class="step-num">1</div>
+        <div class="step-title">Browse &amp; Choose</div>
+        <div class="step-desc">Pick your favourite jersey, studs or gear from our collection</div>
+      </div>
+      <div class="step-item reveal delay-1">
+        <div class="step-num">2</div>
+        <div class="step-title">Add to Cart</div>
+        <div class="step-desc">Select your size and add products to your cart</div>
+      </div>
+      <div class="step-item reveal delay-2">
+        <div class="step-num">3</div>
+        <div class="step-title">Pay via UPI</div>
+        <div class="step-desc">Scan our QR code and pay the order amount via any UPI app</div>
+      </div>
+      <div class="step-item reveal delay-3">
+        <div class="step-num">4</div>
+        <div class="step-title">Get Delivered</div>
+        <div class="step-desc">We pack and ship your order. Track it live until delivery</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:36px;" class="reveal">
+      <a href="how-it-work.html" class="btn btn-outline btn-sm">Learn More About Our Process →</a>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="section">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:40px;" class="reveal">
+      <div class="tag" style="margin:0 auto 12px;">Why RN Sports Hub</div>
+      <h2 class="section-heading">The Advantage of<br><span>Choosing Us</span></h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="why-icon">⚽</div>
+        <div class="why-title">Fan &amp; Player Versions</div>
+        <div class="why-desc">We stock both Fan version and authentic Player version jerseys — exactly like what pros wear on the pitch.</div>
+      </div>
+      <div class="why-card reveal delay-1">
+        <div class="why-icon">✅</div>
+        <div class="why-title">Premium Quality</div>
+        <div class="why-desc">Every product is quality-checked before dispatch. No compromises on material, stitching or printing.</div>
+      </div>
+      <div class="why-card reveal delay-2">
+        <div class="why-icon">🚚</div>
+        <div class="why-title">Fast PAN India Shipping</div>
+        <div class="why-desc">We ship to every corner of India. Orders are dispatched within 24 hours and delivered in 5–7 working days.</div>
+      </div>
+      <div class="why-card reveal delay-3">
+        <div class="why-icon">📱</div>
+        <div class="why-title">Easy UPI Payment</div>
+        <div class="why-desc">Pay safely via PhonePe, GPay, Paytm or any UPI app. No credit card needed, no hidden charges.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BANNER STRIP -->
+<div class="banner-strip">
+  <div class="container">
+    <div class="banner-inner">
       <div>
-        <div class="section-label">Just Dropped</div>
-        <h2 class="section-title">New <em>Arrivals</em></h2>
+        <div class="banner-title">Ready to Play<br>Like a Pro?</div>
+        <div class="banner-sub">150+ football products. Jerseys, Studs &amp; Gear — all in one place.</div>
       </div>
-      <div class="scroll-nav">
-        <button class="scroll-btn scroll-prev" aria-label="Previous">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        </button>
-        <button class="scroll-btn scroll-next" aria-label="Next">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </button>
-      </div>
-    </div>
-
-    <div class="arrivals-scroll-wrapper">
-      <div class="arrivals-scroll">
-
-        <div class="product-card" onclick="window.location='product.html'">
-          <div class="product-card-media">
-            <img class="product-card-img" src="https://images.unsplash.com/photo-1620799140188-3b2a02fd9a77?w=500&q=80&fit=crop" alt="Drop 1">
-            <span class="product-card-badge new">New</span>
-            <div class="product-card-actions">
-              <button class="product-action-btn" data-wishlist><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
-              <button class="product-action-btn" data-add-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
-            </div>
-          </div>
-          <div class="product-card-info">
-            <div class="product-card-category">T-Shirt</div>
-            <div class="product-card-name">Clean Slate Tee</div>
-            <div class="product-card-footer">
-              <span class="product-price">₹699</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="product-card" onclick="window.location='product.html'">
-          <div class="product-card-media">
-            <img class="product-card-img" src="https://images.unsplash.com/photo-1565084888279-aca607bb1650?w=500&q=80&fit=crop" alt="Drop 2">
-            <span class="product-card-badge new">New</span>
-            <div class="product-card-actions">
-              <button class="product-action-btn" data-wishlist><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
-              <button class="product-action-btn" data-add-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
-            </div>
-          </div>
-          <div class="product-card-info">
-            <div class="product-card-category">Football Jersey</div>
-            <div class="product-card-name">Wave Third Kit</div>
-            <div class="product-card-footer">
-              <span class="product-price">₹1,199</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="product-card" onclick="window.location='product.html'">
-          <div class="product-card-media">
-            <img class="product-card-img" src="https://images.unsplash.com/photo-1544816155-12df9643f363?w=500&q=80&fit=crop" alt="Drop 3">
-            <span class="product-card-badge new">New</span>
-            <div class="product-card-actions">
-              <button class="product-action-btn" data-wishlist><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
-              <button class="product-action-btn" data-add-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
-            </div>
-          </div>
-          <div class="product-card-info">
-            <div class="product-card-category">Essentials</div>
-            <div class="product-card-name">Track Joggers</div>
-            <div class="product-card-footer">
-              <span class="product-price">₹1,099</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="product-card" onclick="window.location='product.html'">
-          <div class="product-card-media">
-            <img class="product-card-img" src="https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?w=500&q=80&fit=crop" alt="Drop 4">
-            <span class="product-card-badge new">New</span>
-            <div class="product-card-actions">
-              <button class="product-action-btn" data-wishlist><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
-              <button class="product-action-btn" data-add-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
-            </div>
-          </div>
-          <div class="product-card-info">
-            <div class="product-card-category">Cricket Jersey</div>
-            <div class="product-card-name">Precision Cricket Kit</div>
-            <div class="product-card-footer">
-              <span class="product-price">₹1,499</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="product-card" onclick="window.location='product.html'">
-          <div class="product-card-media">
-            <img class="product-card-img" src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500&q=80&fit=crop" alt="Drop 5">
-            <div class="product-card-actions">
-              <button class="product-action-btn" data-wishlist><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
-              <button class="product-action-btn" data-add-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
-            </div>
-          </div>
-          <div class="product-card-info">
-            <div class="product-card-category">Essentials</div>
-            <div class="product-card-name">Bomber Jacket</div>
-            <div class="product-card-footer">
-              <span class="product-price">₹2,499</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
+      <a href="shop.html" class="btn btn-ghost" style="background:rgba(0,0,0,0.15);border-color:rgba(0,0,0,0.3);color:var(--dark-1);font-size:1.05rem;">
+        Shop the Collection
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+      </a>
     </div>
   </div>
-</section>
-
-<!-- ABOUT BRAND -->
-<section class="about-section" id="about">
-  <div class="container">
-    <div class="about-inner">
-      <div class="about-content reveal">
-        <div class="section-label" style="color:var(--accent)">Our Story</div>
-        <h2 class="about-title">Born from the streets.<br><em>Built for the bold.</em></h2>
-        <p class="about-text">
-          TheSecondWave isn't just clothing — it's a movement. We create premium streetwear that merges the energy of Indian sports culture with contemporary fashion. Every stitch, every seam, every drop is intentional.
-        </p>
-        <p class="about-text">
-          Founded in Indore, we craft pieces that belong on the field and in the streets — because the best style never takes a day off.
-        </p>
-        <div class="about-stats">
-          <div class="stat-item">
-            <div class="stat-number">5K+</div>
-            <div class="stat-label">Happy Customers</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-number">120+</div>
-            <div class="stat-label">Styles</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-number">100%</div>
-            <div class="stat-label">Premium Quality</div>
-          </div>
-        </div>
-      </div>
-      <div class="about-visual reveal reveal-delay-2">
-        <img class="about-img-main"
-          src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=85&fit=crop"
-          alt="Brand story">
-        <img class="about-img-accent"
-          src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&q=80&fit=crop"
-          alt="Craftsmanship">
-      </div>
-    </div>
-  </div>
-</section>
+</div>
 
 <!-- REVIEWS -->
-<section class="reviews-section">
+<section class="section">
   <div class="container">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-label">Testimonials</div>
-        <h2 class="section-title">What Our <em>Customers</em> Say</h2>
+    <div style="text-align:center;margin-bottom:36px;" class="reveal">
+      <div class="tag" style="margin:0 auto 12px;">Customer Reviews</div>
+      <h2 class="section-heading">What Our<br><span>Customers Say</span></h2>
+    </div>
+    <div class="reviews-track-wrap reveal">
+      <div class="reviews-track" id="reviews-track">
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Got the Real Madrid player version jersey — quality is insane. Feels exactly like the original. Delivery was fast too. Highly recommended!"</p>
+          <div class="review-author">
+            <div class="review-avatar" style="background:var(--green-glow);display:flex;align-items:center;justify-content:center;font-size:16px;">👤</div>
+            <div>
+              <div class="review-name">Rahul S.</div>
+              <div class="review-location">Mumbai, MH</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Ordered Nike studs, got them in 6 days. Size is perfect, grip is excellent. The packaging was also solid. Will order again!"</p>
+          <div class="review-author">
+            <div class="review-avatar" style="background:var(--green-glow);display:flex;align-items:center;justify-content:center;font-size:16px;">👤</div>
+            <div>
+              <div class="review-name">Arjun P.</div>
+              <div class="review-location">Bangalore, KA</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★☆</div>
+          <p class="review-text">"Fan version Mbappe jersey looks amazing. The print and fabric are both really good for the price. One of the best stores I've bought from."</p>
+          <div class="review-author">
+            <div class="review-avatar" style="background:var(--green-glow);display:flex;align-items:center;justify-content:center;font-size:16px;">👤</div>
+            <div>
+              <div class="review-name">Karan M.</div>
+              <div class="review-location">Delhi, DL</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"UPI payment was super smooth. Got the order confirmation instantly. Tracking link worked perfectly. The jersey quality is top class!"</p>
+          <div class="review-author">
+            <div class="review-avatar" style="background:var(--green-glow);display:flex;align-items:center;justify-content:center;font-size:16px;">👤</div>
+            <div>
+              <div class="review-name">Saurabh T.</div>
+              <div class="review-location">Pune, MH</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Bought Adidas Predator studs. Absolutely love them — perfect fit and the finish is premium. Shipped within 2 days. Great seller!"</p>
+          <div class="review-author">
+            <div class="review-avatar" style="background:var(--green-glow);display:flex;align-items:center;justify-content:center;font-size:16px;">👤</div>
+            <div>
+              <div class="review-name">Dev K.</div>
+              <div class="review-location">Ahmedabad, GJ</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Ordered football gear set as a gift for my brother. He loved it! Everything was neatly packed and arrived on time. Totally worth it!"</p>
+          <div class="review-author">
+            <div class="review-avatar" style="background:var(--green-glow);display:flex;align-items:center;justify-content:center;font-size:16px;">👤</div>
+            <div>
+              <div class="review-name">Priya V.</div>
+              <div class="review-location">Chennai, TN</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Duplicate for infinite scroll -->
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Got the Real Madrid player version jersey — quality is insane. Feels exactly like the original. Delivery was fast too. Highly recommended!"</p>
+          <div class="review-author">
+            <div class="review-avatar" style="background:var(--green-glow);display:flex;align-items:center;justify-content:center;font-size:16px;">👤</div>
+            <div>
+              <div class="review-name">Rahul S.</div>
+              <div class="review-location">Mumbai, MH</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Ordered Nike studs, got them in 6 days. Size is perfect, grip is excellent. The packaging was also solid. Will order again!"</p>
+          <div class="review-author">
+            <div class="review-avatar" style="background:var(--green-glow);display:flex;align-items:center;justify-content:center;font-size:16px;">👤</div>
+            <div>
+              <div class="review-name">Arjun P.</div>
+              <div class="review-location">Bangalore, KA</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★☆</div>
+          <p class="review-text">"Fan version Mbappe jersey looks amazing. The print and fabric are both really good for the price. One of the best stores I've bought from."</p>
+          <div class="review-author">
+            <div class="review-avatar" style="background:var(--green-glow);display:flex;align-items:center;justify-content:center;font-size:16px;">👤</div>
+            <div>
+              <div class="review-name">Karan M.</div>
+              <div class="review-location">Delhi, DL</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"UPI payment was super smooth. Got the order confirmation instantly. Tracking link worked perfectly. The jersey quality is top class!"</p>
+          <div class="review-author">
+            <div class="review-avatar" style="background:var(--green-glow);display:flex;align-items:center;justify-content:center;font-size:16px;">👤</div>
+            <div>
+              <div class="review-name">Saurabh T.</div>
+              <div class="review-location">Pune, MH</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="reviews-grid">
-      <div class="review-card reveal">
-        <div class="review-stars">★★★★★</div>
-        <p class="review-text">"Honestly the best jersey I've ever bought. The quality is incredible and it fits perfectly. Definitely ordering again."</p>
-        <div class="review-author">
-          <div class="review-avatar">
-            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&q=80&fit=crop&facepad=2&faces=1" alt="Arjun">
-          </div>
-          <div>
-            <div class="review-name">Arjun Sharma</div>
-            <div class="review-date">March 2025</div>
-          </div>
-        </div>
+  </div>
+</section>
+
+<!-- SHOP BY BRAND -->
+<section class="section" style="padding-top:0;">
+  <div class="container">
+    <div style="margin-bottom:36px;" class="reveal">
+      <div class="tag" style="margin-bottom:12px;">Featured Brands</div>
+      <h2 class="section-heading">Shop By <span>Brand</span></h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+      <a href="shop.html?brand=nike" class="brand-cat-card reveal">
+        <div class="brand-cat-logo">NIKE</div>
+        <div class="brand-cat-name">Nike</div>
+        <div class="brand-cat-sub">Shop Nike →</div>
+      </a>
+      <a href="shop.html?brand=adidas" class="brand-cat-card reveal delay-1">
+        <div class="brand-cat-logo">ADIDAS</div>
+        <div class="brand-cat-name">Adidas</div>
+        <div class="brand-cat-sub">Shop Adidas →</div>
+      </a>
+      <a href="shop.html?brand=mizuno" class="brand-cat-card reveal delay-2">
+        <div class="brand-cat-logo">MIZUNO</div>
+        <div class="brand-cat-name">Mizuno</div>
+        <div class="brand-cat-sub">Shop Mizuno →</div>
+      </a>
+      <a href="shop.html?brand=puma" class="brand-cat-card reveal delay-3">
+        <div class="brand-cat-logo">PUMA</div>
+        <div class="brand-cat-name">Puma</div>
+        <div class="brand-cat-sub">Shop Puma →</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CUSTOMER PHOTOS -->
+<section class="section" style="padding-top:0;">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:32px;" class="reveal">
+      <div class="tag" style="margin:0 auto 12px;">Community</div>
+      <h2 class="section-heading">Our <span>Customers</span></h2>
+      <p style="font-family:var(--font-fine);font-size:13px;color:var(--silver);margin-top:8px;">Real people, real gear — tag us @rnsportshub</p>
+    </div>
+    <div style="overflow:hidden;" class="reveal">
+      <div class="photo-carousel" id="photo-carousel">
+        <div class="photo-card" style="background-image:url('https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400&q=80')"></div>
+        <div class="photo-card" style="background-image:url('https://images.unsplash.com/photo-1614632537197-38a17061c2bd?w=400&q=80')"></div>
+        <div class="photo-card" style="background-image:url('https://images.unsplash.com/photo-1556906781-9a412961a28c?w=400&q=80')"></div>
+        <div class="photo-card" style="background-image:url('https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=400&q=80')"></div>
+        <div class="photo-card" style="background-image:url('https://images.unsplash.com/photo-1624526267942-ab0ff8a3e972?w=400&q=80')"></div>
+        <div class="photo-card" style="background-image:url('https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400&q=80')"></div>
+        <div class="photo-card" style="background-image:url('https://images.unsplash.com/photo-1614632537197-38a17061c2bd?w=400&q=80')"></div>
+        <div class="photo-card" style="background-image:url('https://images.unsplash.com/photo-1556906781-9a412961a28c?w=400&q=80')"></div>
       </div>
-      <div class="review-card reveal reveal-delay-1">
-        <div class="review-stars">★★★★★</div>
-        <p class="review-text">"Ordered the cricket kit for my team and everyone loved it. Delivery was super fast too. Will order for the whole league!"</p>
-        <div class="review-author">
-          <div class="review-avatar">
-            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=80&fit=crop&facepad=2&faces=1" alt="Priya">
-          </div>
-          <div>
-            <div class="review-name">Priya Mehta</div>
-            <div class="review-date">February 2025</div>
-          </div>
-        </div>
-      </div>
-      <div class="review-card reveal reveal-delay-2">
-        <div class="review-stars">★★★★★</div>
-        <p class="review-text">"The oversized tee is fire. Wore it to a match day and got so many compliments. Premium feel at a great price."</p>
-        <div class="review-author">
-          <div class="review-avatar">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80&fit=crop&facepad=2&faces=1" alt="Rohan">
-          </div>
-          <div>
-            <div class="review-name">Rohan Patel</div>
-            <div class="review-date">April 2025</div>
-          </div>
-        </div>
-      </div>
+    </div>
+    <div style="text-align:center;margin-top:24px;" class="reveal">
+      <a href="https://www.instagram.com/rnsportshub/" target="_blank" class="btn btn-outline btn-sm">Follow on Instagram →</a>
+    </div>
+  </div>
+</section>
+
+<!-- PAYMENT LOGOS -->
+<section style="padding:40px 0;background:var(--dark-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:20px;" class="reveal">
+      <div class="tag" style="margin:0 auto;">🔒 Secure Payments via UPI</div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;" class="reveal delay-1">
+      <div class="pay-badge">📱 PhonePe</div>
+      <div class="pay-badge">G Pay</div>
+      <div class="pay-badge">Paytm</div>
+      <div class="pay-badge">UPI</div>
+      <div class="pay-badge">BHIM</div>
     </div>
   </div>
 </section>
@@ -555,106 +583,90 @@
 <!-- FOOTER -->
 <footer>
   <div class="container">
-    <div class="footer-top">
+    <div class="footer-grid">
       <div>
-        <div class="footer-brand-logo">THE<span>SECOND</span>WAVE</div>
-        <p class="footer-tagline">Streetwear for those who move differently. Premium jerseys & everyday essentials from Indore to everywhere.</p>
+        <div class="nav-logo-text" style="margin-bottom:4px;">
+          <span class="brand-top" style="font-size:1.6rem;">RN Sports</span>
+          <span class="brand-sub">Hub</span>
+        </div>
+        <p class="footer-brand-desc">
+          India's go-to destination for football jerseys, studs and gear.
+          Fan &amp; Player versions, fast PAN India delivery, UPI payments.
+          We live and breathe football. 🏟️
+        </p>
         <div class="footer-socials">
-          <a href="#" class="social-btn" aria-label="Instagram">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-          </a>
-          <a href="#" class="social-btn" aria-label="Twitter/X">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          </a>
-          <a href="#" class="social-btn" aria-label="Facebook">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
-          </a>
-          <a href="#" class="social-btn" aria-label="YouTube">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.41 19.1C5.12 19.56 12 19.56 12 19.56s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95 29 29 0 00.46-5.25 29 29 0 00-.46-5.48z"/><polygon points="9.75,15.02 15.5,11.75 9.75,8.48 9.75,15.02"/></svg>
-          </a>
+          <a href="#" class="footer-social" title="Instagram">📸</a>
+          <a href="#" class="footer-social" title="WhatsApp">💬</a>
+          <a href="#" class="footer-social" title="YouTube">▶️</a>
         </div>
       </div>
 
       <div>
         <div class="footer-col-title">Quick Links</div>
-        <ul class="footer-links">
-          <li><a href="shop.html">Shop All</a></li>
-          <li><a href="shop.html?cat=jerseys">Jerseys</a></li>
-          <li><a href="shop.html?cat=tees">T-Shirts</a></li>
-          <li><a href="shop.html?cat=essentials">Essentials</a></li>
-          <li><a href="#about">About Us</a></li>
-        </ul>
+        <div class="footer-links">
+          <a href="index.html" class="footer-link">Home</a>
+          <a href="shop.html" class="footer-link">Shop</a>
+          <a href="about.html" class="footer-link">About Us</a>
+          <a href="contact.html" class="footer-link">Contact</a>
+          <a href="tracking.html" class="footer-link">Track Order</a>
+          <a href="how-it-work.html" class="footer-link">How It Works</a>
+        </div>
       </div>
 
       <div>
-        <div class="footer-col-title">Help</div>
-        <ul class="footer-links">
-          <li><a href="#">Size Guide</a></li>
-          <li><a href="#">Shipping Info</a></li>
-          <li><a href="#">Returns Policy</a></li>
-          <li><a href="#">Track Order</a></li>
-          <li><a href="#">Contact Us</a></li>
-        </ul>
+        <div class="footer-col-title">Categories</div>
+        <div class="footer-links">
+          <a href="shop.html?cat=jersey" class="footer-link">Fan Jerseys</a>
+          <a href="shop.html?cat=jersey" class="footer-link">Player Jerseys</a>
+          <a href="shop.html?cat=studs" class="footer-link">Football Studs</a>
+          <a href="shop.html?cat=gear" class="footer-link">Football Gear</a>
+        </div>
       </div>
 
       <div>
-        <div class="footer-col-title">Stay Updated</div>
-        <div class="newsletter-form">
-          <p class="newsletter-desc">Get early access to new drops, exclusive offers, and brand updates.</p>
-          <div class="newsletter-input-group">
-            <input type="email" class="newsletter-input" placeholder="your@email.com" aria-label="Email">
-            <button class="newsletter-btn">Join</button>
+        <div class="footer-col-title">Policies</div>
+        <div class="footer-links">
+          <a href="privacy.html" class="footer-link">Privacy Policy</a>
+          <a href="shipping.html" class="footer-link">Shipping Policy</a>
+          <a href="refund-policy.html" class="footer-link">Refund Policy</a>
+          <a href="terms.html" class="footer-link">Terms &amp; Conditions</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Contact Us</div>
+        <div class="footer-links" style="gap:10px;">
+          <div style="display:flex;align-items:flex-start;gap:8px;font-family:var(--font-fine);font-size:13px;color:var(--silver);">
+            <span>📱</span><span>+91 9123456780</span>
           </div>
+          <div style="display:flex;align-items:flex-start;gap:8px;font-family:var(--font-fine);font-size:13px;color:var(--silver);">
+            <span>📧</span><span>rnsportshub@gmail.com</span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px;font-family:var(--font-fine);font-size:13px;color:var(--silver);">
+            <span>⏰</span><span>Mon–Sat, 10am–8pm</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;">
+          <a href="https://wa.me/919123456780" target="_blank" class="btn btn-green btn-sm" style="justify-content:center;">💬 WhatsApp Us</a>
+          <a href="https://www.instagram.com/rnsportshub/" target="_blank" class="btn btn-outline btn-sm" style="justify-content:center;">📸 Instagram</a>
         </div>
       </div>
     </div>
 
     <div class="footer-bottom">
-      <p class="footer-copy">© 2025 TheSecondWave. All rights reserved.</p>
-      <div class="footer-legal">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Use</a>
-        <a href="#">Cookies</a>
+      <div class="footer-copy">© 2025 RN Sports Hub. All rights reserved.</div>
+      <div class="footer-payments">
+        <span class="footer-pay-label">Pay via:</span>
+        <span class="footer-pay-badge">UPI</span>
+        <span class="footer-pay-badge">GPay</span>
+        <span class="footer-pay-badge">PhonePe</span>
+        <span class="footer-pay-badge">Paytm</span>
       </div>
     </div>
   </div>
 </footer>
 
-<!-- CART SIDEBAR -->
-<div class="cart-overlay" id="cart-overlay"></div>
-<div class="cart-sidebar" id="cart-sidebar">
-  <div class="cart-header">
-    <div class="cart-title">Your Cart</div>
-    <button class="cart-close" id="cart-close" aria-label="Close cart">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-    </button>
-  </div>
-  <div class="cart-body">
-    <div class="cart-empty">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-      <p>Your cart is empty</p>
-      <span>Add some pieces to get started</span>
-    </div>
-  </div>
-  <div class="cart-footer">
-    <div class="cart-subtotal">
-      <span>Subtotal</span>
-      <span>₹0</span>
-    </div>
-    <p class="cart-subtotal-note">Shipping & taxes calculated at checkout</p>
-    <button class="cart-checkout-btn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="18" height="18"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      Proceed to Checkout
-    </button>
-  </div>
-</div>
-
-<!-- TOAST -->
-<div class="toast" id="toast">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16"><path d="M20 6L9 17l-5-5"/></svg>
-  <span class="toast-msg"></span>
-</div>
-
-<script src="assets/js/main.js"></script>
+<script type="module" src="assets/js/cart.js"></script>
+<script type="module" src="assets/js/app.js"></script>
 </body>
 </html>

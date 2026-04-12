@@ -1,319 +1,883 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shop All — TheSecondWave</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shop — RN Sports Hub</title>
+  <meta name="description" content="Browse football jerseys, studs and gear. Fan & Player versions available. Filter by brand, category and price."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+  <style>
+    /* ---- SHOP PAGE SPECIFIC ---- */
+    .shop-hero {
+      background: var(--dark-2);
+      border-bottom: 1px solid var(--border);
+      padding: 40px 0 32px;
+      margin-top: 102px; /* ticker(34) + navbar(68) */
+    }
+    .shop-hero-inner {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .shop-hero-title {
+      font-family: var(--font-display); font-size: clamp(2.4rem,5vw,3.8rem);
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; line-height: 0.95;
+    }
+    .shop-hero-title span { color: var(--green); }
+    .shop-hero-count {
+      font-family: var(--font-fine); font-size: 13px; color: var(--silver); margin-top: 6px;
+    }
+
+    /* ---- LAYOUT ---- */
+    .shop-layout {
+      display: grid; grid-template-columns: 260px 1fr;
+      gap: 28px; align-items: start;
+      padding: 32px 0 80px;
+    }
+
+    /* ---- SIDEBAR FILTERS ---- */
+    .filter-sidebar {
+      position: sticky; top: 110px;
+      background: var(--dark-2); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); overflow: hidden;
+    }
+    .filter-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; border-bottom: 1px solid var(--border);
+    }
+    .filter-header-title {
+      font-family: var(--font-display); font-size: 1.2rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .filter-clear {
+      font-family: var(--font-fine); font-size: 11px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--green);
+      cursor: pointer; transition: var(--transition);
+    }
+    .filter-clear:hover { color: var(--green-dim); }
+    .filter-group { border-bottom: 1px solid var(--border); }
+    .filter-group:last-child { border-bottom: none; }
+    .filter-group-title {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px; cursor: pointer;
+      font-family: var(--font-fine); font-size: 11px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--silver);
+      transition: var(--transition);
+    }
+    .filter-group-title:hover { color: var(--white); }
+    .filter-group-title .chevron {
+      transition: transform 0.2s; font-size: 10px; color: var(--silver);
+    }
+    .filter-group.open .chevron { transform: rotate(180deg); }
+    .filter-group-body {
+      display: none; padding: 4px 20px 16px;
+    }
+    .filter-group.open .filter-group-body { display: block; }
+    .filter-option {
+      display: flex; align-items: center; gap: 10px;
+      padding: 7px 0; cursor: pointer;
+      font-family: var(--font-fine); font-size: 13px; color: var(--silver);
+      transition: var(--transition);
+    }
+    .filter-option:hover { color: var(--white); }
+    .filter-option input[type="checkbox"] { display: none; }
+    .filter-checkbox {
+      width: 16px; height: 16px; flex-shrink: 0;
+      border: 1.5px solid var(--border); border-radius: 3px;
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--transition);
+    }
+    .filter-option.checked .filter-checkbox {
+      background: var(--green); border-color: var(--green);
+    }
+    .filter-option.checked .filter-checkbox::after {
+      content: '✓'; font-size: 10px; font-weight: 700; color: var(--dark-1);
+    }
+    .filter-option.checked { color: var(--white); }
+
+    /* Price range */
+    .price-range-wrap { padding: 4px 0 8px; }
+    .price-inputs { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .price-input {
+      flex: 1; background: var(--dark-3); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 8px 10px;
+      font-family: var(--font-fine); font-size: 12px; color: var(--off-white);
+      outline: none; width: 100%;
+    }
+    .price-input:focus { border-color: var(--border-green); }
+    .price-sep { font-size: 11px; color: var(--silver); flex-shrink: 0; }
+    .price-apply {
+      width: 100%; background: var(--green-glow); border: 1px solid var(--border-green);
+      border-radius: var(--radius-sm); padding: 8px;
+      font-family: var(--font-fine); font-size: 11px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--green);
+      cursor: pointer; transition: var(--transition);
+    }
+    .price-apply:hover { background: var(--green); color: var(--dark-1); }
+
+    /* Mobile filter toggle */
+    .mobile-filter-btn {
+      display: none; align-items: center; gap: 8px;
+      font-family: var(--font-display); font-size: 1rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 10px 18px; background: var(--dark-3);
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      color: var(--off-white); cursor: pointer; transition: var(--transition);
+    }
+    .mobile-filter-btn:hover { border-color: var(--border-green); color: var(--green); }
+
+    /* Filter drawer on mobile */
+    #filter-drawer-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6); z-index: 1100; backdrop-filter: blur(4px);
+    }
+    #filter-drawer-overlay.open { display: block; }
+    #filter-drawer {
+      position: fixed; bottom: -100%; left: 0; right: 0;
+      max-height: 85vh; background: var(--dark-2);
+      border-top: 1px solid var(--border); border-radius: 16px 16px 0 0;
+      z-index: 1101; overflow-y: auto;
+      transition: bottom 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    #filter-drawer.open { bottom: 0; }
+    .drawer-handle {
+      width: 36px; height: 4px; background: var(--border);
+      border-radius: 2px; margin: 12px auto 0;
+    }
+
+    /* ---- PRODUCTS AREA ---- */
+    .shop-toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .active-filters { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .active-filter-tag {
+      display: flex; align-items: center; gap: 6px;
+      font-family: var(--font-fine); font-size: 11px; font-weight: 600;
+      background: var(--green-glow); border: 1px solid var(--border-green);
+      color: var(--green); padding: 4px 10px; border-radius: 20px;
+      cursor: pointer; transition: var(--transition);
+    }
+    .active-filter-tag:hover { background: var(--red); border-color: var(--red); color: var(--white); }
+    .sort-wrap { display: flex; align-items: center; gap: 10px; }
+    .sort-label { font-family: var(--font-fine); font-size: 12px; color: var(--silver); white-space: nowrap; }
+    .sort-select {
+      background: var(--dark-3); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 8px 14px;
+      font-family: var(--font-fine); font-size: 12px; color: var(--off-white);
+      outline: none; cursor: pointer; transition: var(--transition);
+    }
+    .sort-select:focus { border-color: var(--border-green); }
+    .view-toggle { display: flex; gap: 4px; }
+    .view-btn {
+      width: 34px; height: 34px; background: var(--dark-3);
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--silver); cursor: pointer; transition: var(--transition);
+      font-size: 13px;
+    }
+    .view-btn.active, .view-btn:hover { border-color: var(--border-green); color: var(--green); background: var(--green-glow); }
+
+    /* Grid/List view */
+    #products-grid.list-view {
+      grid-template-columns: 1fr !important;
+    }
+    #products-grid.list-view .product-card {
+      display: flex; flex-direction: row;
+    }
+    #products-grid.list-view .product-card-img-wrap {
+      width: 180px; flex-shrink: 0; aspect-ratio: auto; height: 180px;
+    }
+    #products-grid.list-view .product-card-quick { display: none; }
+
+    /* Empty / loading states */
+    .shop-empty {
+      grid-column: 1/-1; text-align: center; padding: 80px 20px;
+    }
+    .shop-empty-icon { font-size: 48px; margin-bottom: 16px; }
+    .shop-empty-title {
+      font-family: var(--font-display); font-size: 2rem; font-weight: 600;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .shop-empty-sub { font-family: var(--font-fine); font-size: 14px; color: var(--silver); }
+
+    /* Pagination */
+    .pagination {
+      display: flex; align-items: center; justify-content: center;
+      gap: 6px; margin-top: 48px;
+    }
+    .page-btn {
+      width: 38px; height: 38px; background: var(--dark-3);
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-fine); font-size: 13px; font-weight: 600;
+      color: var(--silver); cursor: pointer; transition: var(--transition);
+    }
+    .page-btn:hover, .page-btn.active {
+      background: var(--green); border-color: var(--green); color: var(--dark-1);
+    }
+    .page-btn.disabled { opacity: 0.3; pointer-events: none; }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .shop-layout { grid-template-columns: 1fr; }
+      .filter-sidebar { display: none; }
+      .mobile-filter-btn { display: flex; }
+    }
+    @media (max-width: 600px) {
+      .shop-hero { margin-top: 102px; padding: 28px 0 20px; }
+      #products-grid { grid-template-columns: 1fr 1fr !important; gap: 12px; }
+    }
+  </style>
 </head>
 <body>
 
-<div id="page-loader">
-  <div class="loader-logo">THE SECOND WAVE</div>
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span class="ticker-item">⚽ Fan &amp; Player Version Jerseys</span>
+    <span class="ticker-item">🚚 Fast Delivery PAN India</span>
+    <span class="ticker-item">📦 5–7 Working Days</span>
+    <span class="ticker-item">📱 Pay via UPI</span>
+    <span class="ticker-item">✅ 100% Authentic Quality</span>
+    <span class="ticker-item">⚽ Fan &amp; Player Version Jerseys</span>
+    <span class="ticker-item">🚚 Fast Delivery PAN India</span>
+    <span class="ticker-item">📦 5–7 Working Days</span>
+    <span class="ticker-item">📱 Pay via UPI</span>
+    <span class="ticker-item">✅ 100% Authentic Quality</span>
+  </div>
 </div>
 
 <!-- NAVBAR -->
 <nav id="navbar">
-  <div class="container">
-    <div class="nav-inner">
-      <a href="index.html" class="nav-logo">THE<span>SECOND</span>WAVE</a>
-      <ul class="nav-links">
-        <li><a href="shop.html" style="color:var(--ink)">Shop All</a></li>
-        <li><a href="shop.html?cat=jerseys">Jerseys</a></li>
-        <li><a href="shop.html?cat=tees">T-Shirts</a></li>
-        <li><a href="shop.html?cat=essentials">Essentials</a></li>
-        <li><a href="index.html#about">About</a></li>
-      </ul>
-      <div class="nav-actions">
-        <button class="nav-icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
-        <button class="nav-icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
-        <button class="nav-icon-btn" data-cart-open>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-          <span class="cart-count">0</span>
-        </button>
-        <button class="hamburger"><span></span><span></span><span></span></button>
+  <div class="nav-inner">
+    <div class="nav-left">
+      <button id="hamburger" class="nav-icon-btn" aria-label="Menu">
+        <div class="hamburger-lines"><span></span><span></span><span></span></div>
+      </button>
+      <div class="nav-search">
+        <svg class="nav-search-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input type="text" id="nav-search-input" placeholder="Search jerseys, studs, gear..." autocomplete="off"/>
+        <div id="search-results-dropdown"></div>
       </div>
+    </div>
+
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-text">
+        <span class="brand-top">RN Sports</span>
+        <span class="brand-sub">Hub</span>
+      </div>
+    </a>
+
+    <div class="nav-right">
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+        <a href="tracking.html" class="nav-link">Track</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+      <button id="mobile-search-btn" class="nav-icon-btn mobile-search-trigger" aria-label="Search">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="18" height="18">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+      </button>
+      <button class="nav-icon-btn" data-cart-trigger aria-label="Cart">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" width="20" height="20">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 2.3c-.6.6-.2 1.7.7 1.7H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+        </svg>
+        <span class="cart-badge" style="display:none;">0</span>
+      </button>
     </div>
   </div>
 </nav>
 
-<div class="mobile-nav">
-  <ul>
-    <li><a href="shop.html">Shop All</a></li>
-    <li><a href="shop.html?cat=jerseys">Jerseys</a></li>
-    <li><a href="shop.html?cat=tees">T-Shirts</a></li>
-    <li><a href="shop.html?cat=essentials">Essentials</a></li>
-  </ul>
+<!-- MOBILE NAV -->
+<div id="mobile-nav">
+  <div class="mobile-nav-links">
+    <a href="index.html" class="mobile-nav-link">🏠&nbsp; Home</a>
+    <a href="shop.html" class="mobile-nav-link">⚽&nbsp; Shop</a>
+    <a href="tracking.html" class="mobile-nav-link">📦&nbsp; Track Order</a>
+    <a href="about.html" class="mobile-nav-link">ℹ️&nbsp; About Us</a>
+    <a href="contact.html" class="mobile-nav-link">📞&nbsp; Contact</a>
+    <a href="how-it-work.html" class="mobile-nav-link">❓&nbsp; How It Works</a>
+  </div>
 </div>
+<div id="mobile-nav-backdrop"></div>
 
-<!-- PAGE HERO -->
-<div class="page-hero" data-text="SHOP">
-  <div class="container">
-    <p class="page-hero-eyebrow">SS '25 Collection</p>
-    <h1 class="page-hero-title">Shop All</h1>
-    <p class="page-hero-sub">Premium streetwear, jerseys & everyday essentials</p>
+<!-- MOBILE SEARCH -->
+<div id="mobile-search-overlay" role="dialog" aria-modal="true" aria-label="Search">
+  <div id="mobile-search-box">
+    <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border);">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16" height="16" style="color:var(--silver);flex-shrink:0;">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      </svg>
+      <input type="search" id="mobile-search-input" placeholder="Search jerseys, studs..." autocomplete="off"
+        style="flex:1;background:transparent;border:none;outline:none;font-size:16px;color:var(--off-white);font-family:var(--font-body);"/>
+      <button id="mobile-search-close" style="background:none;border:none;color:var(--silver);cursor:pointer;padding:4px;font-size:20px;line-height:1;">&#10005;</button>
+    </div>
+    <div id="mobile-search-dropdown"></div>
   </div>
 </div>
 
-<!-- FILTER BAR -->
-<div class="filter-bar">
+<!-- SHOP HERO -->
+<div class="shop-hero">
   <div class="container">
-    <div class="filter-bar-inner">
-      <span class="filter-label">Filter:</span>
-      <div class="filter-group" style="display:flex;gap:8px;flex-wrap:wrap;">
-        <button class="filter-btn active">All</button>
-        <button class="filter-btn">T-Shirts</button>
-        <button class="filter-btn">Football Jerseys</button>
-        <button class="filter-btn">Cricket Jerseys</button>
-        <button class="filter-btn">Essentials</button>
+    <div class="shop-hero-inner">
+      <div>
+        <div class="tag" style="margin-bottom:10px;" id="shop-breadcrumb">All Products</div>
+        <h1 class="shop-hero-title" id="shop-page-title">Shop <span>All</span></h1>
+        <p class="shop-hero-count" id="products-count">Loading products...</p>
       </div>
-
-      <select class="filter-select" aria-label="Size">
-        <option value="">Size</option>
-        <option>XS</option><option>S</option><option>M</option>
-        <option>L</option><option>XL</option><option>XXL</option>
-      </select>
-
-      <select class="filter-select" aria-label="Sort">
-        <option>Sort: Featured</option>
-        <option>Price: Low → High</option>
-        <option>Price: High → Low</option>
-        <option>Newest First</option>
-        <option>Best Sellers</option>
-      </select>
-
-      <div class="filter-spacer"></div>
-      <span class="results-count">24 products</span>
-      <div class="view-toggle">
-        <button class="view-btn active" aria-label="Grid view">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <button class="mobile-filter-btn" id="mobile-filter-toggle">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4h18M7 12h10M11 20h2"/></svg>
+          Filters
         </button>
-        <button class="view-btn" aria-label="List view">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        </button>
+        <div class="sort-wrap">
+          <span class="sort-label">Sort:</span>
+          <select class="sort-select" id="sort-select">
+            <option value="featured">Featured</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="newest">Newest First</option>
+            <option value="name">Name A–Z</option>
+          </select>
+        </div>
+        <div class="view-toggle">
+          <button class="view-btn active" id="grid-view-btn" title="Grid View">⊞</button>
+          <button class="view-btn" id="list-view-btn" title="List View">☰</button>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- SHOP GRID -->
-<section class="shop-section">
-  <div class="container">
-    <div class="shop-grid">
+<!-- MAIN SHOP LAYOUT -->
+<div class="container">
+  <div class="shop-layout">
 
-      <!-- Product 1 -->
-      <div class="product-card reveal" onclick="window.location='product.html'">
-        <div class="product-card-media">
-          <img class="product-card-img" src="https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=500&q=80&fit=crop" alt="">
-          <img class="product-card-img-hover" src="https://images.unsplash.com/photo-1604671801908-6f0c6a092c05?w=500&q=80&fit=crop" alt="">
-          <span class="product-card-badge new">New</span>
-          <div class="product-card-actions">
-            <button class="product-action-btn" data-wishlist><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
-            <button class="product-action-btn" data-add-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
-          </div>
+    <!-- SIDEBAR -->
+    <aside class="filter-sidebar" id="filter-sidebar">
+      <div class="filter-header">
+        <span class="filter-header-title">Filters</span>
+        <span class="filter-clear" id="clear-all-filters">Clear All</span>
+      </div>
+
+      <!-- Category -->
+      <div class="filter-group open" id="fg-category">
+        <div class="filter-group-title" onclick="toggleFilterGroup('fg-category')">
+          Category <span class="chevron">▼</span>
         </div>
-        <div class="product-card-info">
-          <div class="product-card-category">Football Jersey</div>
-          <div class="product-card-name">Wave Classic Home Kit</div>
-          <div class="product-card-footer"><span class="product-price">₹1,299</span><div class="product-rating"><span class="stars">★★★★★</span></div></div>
+        <div class="filter-group-body">
+          <label class="filter-option" data-filter="category" data-value="jersey">
+            <span class="filter-checkbox"></span> Jerseys
+          </label>
+          <label class="filter-option" data-filter="category" data-value="studs">
+            <span class="filter-checkbox"></span> Studs &amp; Shoes
+          </label>
+          <label class="filter-option" data-filter="category" data-value="gear">
+            <span class="filter-checkbox"></span> Football Gear
+          </label>
         </div>
       </div>
 
-      <!-- Product 2 -->
-      <div class="product-card reveal reveal-delay-1" onclick="window.location='product.html'">
-        <div class="product-card-media">
-          <img class="product-card-img" src="https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=500&q=80&fit=crop" alt="">
-          <img class="product-card-img-hover" src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=500&q=80&fit=crop" alt="">
-          <span class="product-card-badge sale">−20%</span>
-          <div class="product-card-actions">
-            <button class="product-action-btn" data-wishlist><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
-            <button class="product-action-btn" data-add-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
-          </div>
+      <!-- Brand -->
+      <div class="filter-group open" id="fg-brand">
+        <div class="filter-group-title" onclick="toggleFilterGroup('fg-brand')">
+          Brand <span class="chevron">▼</span>
         </div>
-        <div class="product-card-info">
-          <div class="product-card-category">T-Shirt</div>
-          <div class="product-card-name">Oversized Wave Tee</div>
-          <div class="product-card-footer"><span class="product-price">₹799</span><span class="product-price-old">₹999</span></div>
-        </div>
-      </div>
-
-      <!-- Product 3 -->
-      <div class="product-card reveal reveal-delay-2" onclick="window.location='product.html'">
-        <div class="product-card-media">
-          <img class="product-card-img" src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=500&q=80&fit=crop" alt="">
-          <img class="product-card-img-hover" src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=500&q=80&fit=crop" alt="">
-          <div class="product-card-actions">
-            <button class="product-action-btn" data-wishlist><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
-            <button class="product-action-btn" data-add-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
-          </div>
-        </div>
-        <div class="product-card-info">
-          <div class="product-card-category">Cricket Jersey</div>
-          <div class="product-card-name">Pro Cricket Elite Set</div>
-          <div class="product-card-footer"><span class="product-price">₹1,599</span><div class="product-rating"><span class="stars">★★★★★</span></div></div>
+        <div class="filter-group-body">
+          <label class="filter-option" data-filter="brand" data-value="nike">
+            <span class="filter-checkbox"></span> Nike
+          </label>
+          <label class="filter-option" data-filter="brand" data-value="adidas">
+            <span class="filter-checkbox"></span> Adidas
+          </label>
+          <label class="filter-option" data-filter="brand" data-value="puma">
+            <span class="filter-checkbox"></span> Puma
+          </label>
+          <label class="filter-option" data-filter="brand" data-value="mizuno">
+            <span class="filter-checkbox"></span> Mizuno
+          </label>
+          <label class="filter-option" data-filter="brand" data-value="under armour">
+            <span class="filter-checkbox"></span> Under Armour
+          </label>
+          <label class="filter-option" data-filter="brand" data-value="other">
+            <span class="filter-checkbox"></span> Other
+          </label>
         </div>
       </div>
 
-      <!-- Product 4 -->
-      <div class="product-card reveal reveal-delay-3" onclick="window.location='product.html'">
-        <div class="product-card-media">
-          <img class="product-card-img" src="https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=500&q=80&fit=crop" alt="">
-          <div class="product-card-actions">
-            <button class="product-action-btn" data-wishlist><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
-            <button class="product-action-btn" data-add-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
-          </div>
+      <!-- Jersey Type -->
+      <div class="filter-group open" id="fg-type">
+        <div class="filter-group-title" onclick="toggleFilterGroup('fg-type')">
+          Jersey Type <span class="chevron">▼</span>
         </div>
-        <div class="product-card-info">
-          <div class="product-card-category">Essentials</div>
-          <div class="product-card-name">Street Fleece Hoodie</div>
-          <div class="product-card-footer"><span class="product-price">₹1,899</span></div>
-        </div>
-      </div>
-
-      <!-- Product 5 -->
-      <div class="product-card reveal" onclick="window.location='product.html'">
-        <div class="product-card-media">
-          <img class="product-card-img" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80&fit=crop" alt="">
-          <span class="product-card-badge">Limited</span>
-          <div class="product-card-actions">
-            <button class="product-action-btn" data-wishlist><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
-            <button class="product-action-btn" data-add-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
-          </div>
-        </div>
-        <div class="product-card-info">
-          <div class="product-card-category">Football Jersey</div>
-          <div class="product-card-name">Away Kit – Midnight</div>
-          <div class="product-card-footer"><span class="product-price">₹1,399</span></div>
+        <div class="filter-group-body">
+          <label class="filter-option" data-filter="jerseyType" data-value="fan">
+            <span class="filter-checkbox"></span> Fan Version
+          </label>
+          <label class="filter-option" data-filter="jerseyType" data-value="player">
+            <span class="filter-checkbox"></span> Player Version
+          </label>
         </div>
       </div>
 
-      <!-- Product 6 -->
-      <div class="product-card reveal reveal-delay-1" onclick="window.location='product.html'">
-        <div class="product-card-media">
-          <img class="product-card-img" src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=500&q=80&fit=crop" alt="">
-          <img class="product-card-img-hover" src="https://images.unsplash.com/photo-1562157873-818bc0726f68?w=500&q=80&fit=crop" alt="">
-          <span class="product-card-badge new">New</span>
-          <div class="product-card-actions">
-            <button class="product-action-btn" data-wishlist><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
-            <button class="product-action-btn" data-add-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
-          </div>
+      <!-- Price -->
+      <div class="filter-group open" id="fg-price">
+        <div class="filter-group-title" onclick="toggleFilterGroup('fg-price')">
+          Price Range <span class="chevron">▼</span>
         </div>
-        <div class="product-card-info">
-          <div class="product-card-category">T-Shirt</div>
-          <div class="product-card-name">Archive Graphic Tee</div>
-          <div class="product-card-footer"><span class="product-price">₹849</span></div>
+        <div class="filter-group-body">
+          <div class="price-range-wrap">
+            <div class="price-inputs">
+              <input type="number" class="price-input" id="price-min" placeholder="Min ₹" min="0"/>
+              <span class="price-sep">–</span>
+              <input type="number" class="price-input" id="price-max" placeholder="Max ₹" min="0"/>
+            </div>
+            <button class="price-apply" id="apply-price">Apply Price</button>
+          </div>
         </div>
       </div>
 
-      <!-- Product 7 -->
-      <div class="product-card reveal reveal-delay-2" onclick="window.location='product.html'">
-        <div class="product-card-media">
-          <img class="product-card-img" src="https://images.unsplash.com/photo-1620799140188-3b2a02fd9a77?w=500&q=80&fit=crop" alt="">
-          <div class="product-card-actions">
-            <button class="product-action-btn" data-wishlist><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
-            <button class="product-action-btn" data-add-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
-          </div>
+      <!-- In Stock -->
+      <div class="filter-group open" id="fg-stock">
+        <div class="filter-group-title" onclick="toggleFilterGroup('fg-stock')">
+          Availability <span class="chevron">▼</span>
         </div>
-        <div class="product-card-info">
-          <div class="product-card-category">T-Shirt</div>
-          <div class="product-card-name">Clean Slate Tee</div>
-          <div class="product-card-footer"><span class="product-price">₹699</span></div>
+        <div class="filter-group-body">
+          <label class="filter-option" data-filter="inStock" data-value="true">
+            <span class="filter-checkbox"></span> In Stock Only
+          </label>
+        </div>
+      </div>
+    </aside>
+
+    <!-- PRODUCTS AREA -->
+    <div>
+      <!-- Active Filters -->
+      <div class="shop-toolbar">
+        <div class="active-filters" id="active-filters-wrap"></div>
+      </div>
+
+      <!-- Grid -->
+      <div class="products-grid" id="products-grid">
+        <!-- filled by JS -->
+        <div class="shop-empty">
+          <div class="shop-empty-icon">⚽</div>
+          <div class="shop-empty-title">Loading...</div>
+          <div class="shop-empty-sub">Fetching products for you</div>
         </div>
       </div>
 
-      <!-- Product 8 -->
-      <div class="product-card reveal reveal-delay-3" onclick="window.location='product.html'">
-        <div class="product-card-media">
-          <img class="product-card-img" src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500&q=80&fit=crop" alt="">
-          <div class="product-card-actions">
-            <button class="product-action-btn" data-wishlist><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
-            <button class="product-action-btn" data-add-cart><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
-          </div>
-        </div>
-        <div class="product-card-info">
-          <div class="product-card-category">Essentials</div>
-          <div class="product-card-name">Bomber Jacket</div>
-          <div class="product-card-footer"><span class="product-price">₹2,499</span></div>
-        </div>
-      </div>
-
+      <!-- Pagination -->
+      <div class="pagination" id="pagination"></div>
     </div>
 
-    <!-- Load More -->
-    <div style="text-align:center;margin-top:60px;" class="reveal">
-      <button class="btn-outline" onclick="this.textContent='Loading...'">Load More Products</button>
-    </div>
   </div>
-</section>
+</div>
+
+<!-- MOBILE FILTER DRAWER -->
+<div id="filter-drawer-overlay"></div>
+<div id="filter-drawer">
+  <div class="drawer-handle"></div>
+  <div id="filter-drawer-inner" style="padding:16px 0 32px;"></div>
+</div>
 
 <!-- FOOTER -->
 <footer>
   <div class="container">
-    <div class="footer-top">
+    <div class="footer-grid">
       <div>
-        <div class="footer-brand-logo">THE<span>SECOND</span>WAVE</div>
-        <p class="footer-tagline">Streetwear for those who move differently.</p>
+        <div class="nav-logo-text" style="margin-bottom:4px;">
+          <span class="brand-top" style="font-size:1.6rem;">RN Sports</span>
+          <span class="brand-sub">Hub</span>
+        </div>
+        <p class="footer-brand-desc">India's go-to destination for football jerseys, studs and gear. Fan &amp; Player versions, fast PAN India delivery, UPI payments.</p>
         <div class="footer-socials">
-          <a href="#" class="social-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
-          <a href="#" class="social-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+          <a href="#" class="footer-social" title="Instagram">📸</a>
+          <a href="#" class="footer-social" title="WhatsApp">💬</a>
         </div>
       </div>
       <div>
-        <div class="footer-col-title">Shop</div>
-        <ul class="footer-links">
-          <li><a href="shop.html">All Products</a></li>
-          <li><a href="#">Jerseys</a></li>
-          <li><a href="#">T-Shirts</a></li>
-          <li><a href="#">Essentials</a></li>
-        </ul>
+        <div class="footer-col-title">Quick Links</div>
+        <div class="footer-links">
+          <a href="index.html" class="footer-link">Home</a>
+          <a href="shop.html" class="footer-link">Shop</a>
+          <a href="about.html" class="footer-link">About Us</a>
+          <a href="contact.html" class="footer-link">Contact</a>
+          <a href="tracking.html" class="footer-link">Track Order</a>
+        </div>
       </div>
       <div>
-        <div class="footer-col-title">Help</div>
-        <ul class="footer-links">
-          <li><a href="#">Size Guide</a></li>
-          <li><a href="#">Shipping</a></li>
-          <li><a href="#">Returns</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
+        <div class="footer-col-title">Categories</div>
+        <div class="footer-links">
+          <a href="shop.html?cat=jersey" class="footer-link">Fan Jerseys</a>
+          <a href="shop.html?cat=jersey" class="footer-link">Player Jerseys</a>
+          <a href="shop.html?cat=studs" class="footer-link">Football Studs</a>
+          <a href="shop.html?cat=gear" class="footer-link">Football Gear</a>
+        </div>
       </div>
       <div>
-        <div class="footer-col-title">Newsletter</div>
-        <p class="newsletter-desc">Get early access to new drops.</p>
-        <div class="newsletter-input-group" style="margin-top:12px;">
-          <input type="email" class="newsletter-input" placeholder="your@email.com">
-          <button class="newsletter-btn">Join</button>
+        <div class="footer-col-title">Policies</div>
+        <div class="footer-links">
+          <a href="privacy.html" class="footer-link">Privacy Policy</a>
+          <a href="shipping.html" class="footer-link">Shipping Policy</a>
+          <a href="refund-policy.html" class="footer-link">Refund Policy</a>
+          <a href="terms.html" class="footer-link">Terms &amp; Conditions</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact Us</div>
+        <div class="footer-links" style="gap:10px;">
+          <div style="display:flex;gap:8px;font-family:var(--font-fine);font-size:13px;color:var(--silver);"><span>📱</span><span>+91 9123456780</span></div>
+          <div style="display:flex;gap:8px;font-family:var(--font-fine);font-size:13px;color:var(--silver);"><span>⏰</span><span>Mon–Sat, 10am–8pm</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;">
+          <a href="https://wa.me/919123456780" target="_blank" class="btn btn-green btn-sm" style="justify-content:center;">💬 WhatsApp Us</a>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      <p class="footer-copy">© 2025 TheSecondWave. All rights reserved.</p>
-      <div class="footer-legal">
-        <a href="#">Privacy</a><a href="#">Terms</a>
+      <div class="footer-copy">© 2025 RN Sports Hub. All rights reserved.</div>
+      <div class="footer-payments">
+        <span class="footer-pay-label">Pay via:</span>
+        <span class="footer-pay-badge">UPI</span>
+        <span class="footer-pay-badge">GPay</span>
+        <span class="footer-pay-badge">PhonePe</span>
       </div>
     </div>
   </div>
 </footer>
 
-<!-- CART SIDEBAR -->
-<div class="cart-overlay" id="cart-overlay"></div>
-<div class="cart-sidebar" id="cart-sidebar">
-  <div class="cart-header">
-    <div class="cart-title">Your Cart</div>
-    <button class="cart-close" id="cart-close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-  </div>
-  <div class="cart-body"></div>
-  <div class="cart-footer">
-    <div class="cart-subtotal"><span>Subtotal</span><span>₹0</span></div>
-    <p class="cart-subtotal-note">Shipping calculated at checkout</p>
-    <button class="cart-checkout-btn">Proceed to Checkout</button>
-  </div>
-</div>
+<script type="module" src="assets/js/cart.js"></script>
+<script type="module" src="assets/js/app.js"></script>
+<script type="module">
+import { fetchAllProducts } from './assets/js/products.js';
 
-<div class="toast" id="toast">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="16" height="16"><path d="M20 6L9 17l-5-5"/></svg>
-  <span class="toast-msg"></span>
-</div>
+// ---- STATE ----
+let allProducts = [];
+let activeFilters = { category: [], brand: [], jerseyType: [], inStock: [], priceMin: null, priceMax: null };
+let currentSort = 'featured';
+let currentPage = 1;
+const PER_PAGE = 12;
+let isListView = false;
 
-<script src="assets/js/main.js"></script>
+// ---- INIT ----
+document.addEventListener('DOMContentLoaded', async () => {
+  allProducts = await fetchAllProducts();
+
+  // If no Firebase products, use dummy data
+  if (allProducts.length === 0) {
+    allProducts = getDummyProducts();
+  }
+
+  // Read URL params
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('cat')) {
+    activeFilters.category = [params.get('cat')];
+    tickFilterOption('category', params.get('cat'));
+  }
+  if (params.get('brand')) {
+    activeFilters.brand = [params.get('brand')];
+    tickFilterOption('brand', params.get('brand'));
+  }
+  if (params.get('q')) {
+    // Search mode — filter by name
+    const q = params.get('q').toLowerCase();
+    allProducts = allProducts.filter(p =>
+      (p.name||'').toLowerCase().includes(q) ||
+      (p.brand||'').toLowerCase().includes(q) ||
+      (p.category||'').toLowerCase().includes(q)
+    );
+    document.getElementById('shop-page-title').innerHTML = `Results for <span>"${params.get('q')}"</span>`;
+    document.getElementById('shop-breadcrumb').textContent = 'Search Results';
+  }
+
+  updateShopTitle();
+  renderProducts();
+  initFilterEvents();
+  initViewToggle();
+  initMobileFilter();
+  initSortSelect();
+});
+
+// ---- DUMMY PRODUCTS (until Firebase is set up) ----
+function getDummyProducts() {
+  const imgs = [
+    'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400&q=80',
+    'https://images.unsplash.com/photo-1614632537197-38a17061c2bd?w=400&q=80',
+    'https://images.unsplash.com/photo-1556906781-9a412961a28c?w=400&q=80',
+    'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=400&q=80',
+    'https://images.unsplash.com/photo-1624526267942-ab0ff8a3e972?w=400&q=80',
+  ];
+  const products = [];
+  const brands = ['nike','adidas','puma','mizuno'];
+  const categories = ['jersey','jersey','jersey','studs','gear'];
+  const names = [
+    'Fan Version Jersey','Player Version Jersey','Home Jersey','Away Jersey',
+    'Football Studs','Training Shoes','Football Gear Set','Goalkeeper Gloves',
+    'Shin Guards Set','Football Socks','Training Jersey','Match Jersey'
+  ];
+  for (let i = 0; i < 20; i++) {
+    products.push({
+      id: String(i+1),
+      name: names[i % names.length] + ' ' + (i+1),
+      category: categories[i % categories.length],
+      brand: brands[i % brands.length],
+      jerseyType: i % 2 === 0 ? 'fan' : 'player',
+      price: [599,799,999,1299,1499,1799][i%6],
+      originalPrice: [999,1299,1599,1999,2499,2799][i%6],
+      images: [imgs[i % imgs.length]],
+      sizes: ['S','M','L','XL'],
+      stock: i % 10 !== 0 ? 10 : 0,
+      featured: i < 4,
+      badge: ['new','hot','sale',null,null][i%5],
+    });
+  }
+  return products;
+}
+
+// ---- FILTER + SORT LOGIC ----
+function getFilteredProducts() {
+  let products = [...allProducts];
+
+  if (activeFilters.category.length > 0)
+    products = products.filter(p => activeFilters.category.includes(p.category));
+  if (activeFilters.brand.length > 0)
+    products = products.filter(p => activeFilters.brand.includes((p.brand||'').toLowerCase()));
+  if (activeFilters.jerseyType.length > 0)
+    products = products.filter(p => activeFilters.jerseyType.includes(p.jerseyType));
+  if (activeFilters.inStock.includes('true'))
+    products = products.filter(p => p.stock > 0);
+  if (activeFilters.priceMin !== null)
+    products = products.filter(p => p.price >= activeFilters.priceMin);
+  if (activeFilters.priceMax !== null)
+    products = products.filter(p => p.price <= activeFilters.priceMax);
+
+  // Sort
+  switch (currentSort) {
+    case 'price-asc':  products.sort((a,b) => a.price - b.price); break;
+    case 'price-desc': products.sort((a,b) => b.price - a.price); break;
+    case 'newest':     products.sort((a,b) => (b.createdAt||0) - (a.createdAt||0)); break;
+    case 'name':       products.sort((a,b) => (a.name||'').localeCompare(b.name||'')); break;
+    default: /* featured first */
+      products.sort((a,b) => (b.featured?1:0) - (a.featured?1:0)); break;
+  }
+  return products;
+}
+
+function renderProducts() {
+  const filtered = getFilteredProducts();
+  const total = filtered.length;
+  const totalPages = Math.ceil(total / PER_PAGE);
+  if (currentPage > totalPages) currentPage = 1;
+  const start = (currentPage - 1) * PER_PAGE;
+  const paginated = filtered.slice(start, start + PER_PAGE);
+
+  const grid = document.getElementById('products-grid');
+  const countEl = document.getElementById('products-count');
+
+  countEl.textContent = total === 0 ? 'No products found' : `${total} product${total !== 1 ? 's' : ''} found`;
+
+  if (paginated.length === 0) {
+    grid.innerHTML = `
+      <div class="shop-empty">
+        <div class="shop-empty-icon">🔍</div>
+        <div class="shop-empty-title">No Products Found</div>
+        <div class="shop-empty-sub">Try adjusting your filters or browse all products</div>
+        <button onclick="clearAllFilters()" class="btn btn-outline btn-sm" style="margin-top:16px;">Clear Filters</button>
+      </div>`;
+    document.getElementById('pagination').innerHTML = '';
+    return;
+  }
+
+  grid.innerHTML = paginated.map(p => window.buildProductCard(p)).join('');
+  if (isListView) grid.classList.add('list-view');
+  else grid.classList.remove('list-view');
+
+  renderPagination(totalPages);
+  renderActiveFilterTags();
+}
+
+function renderPagination(totalPages) {
+  const el = document.getElementById('pagination');
+  if (totalPages <= 1) { el.innerHTML = ''; return; }
+  let html = `<button class="page-btn ${currentPage===1?'disabled':''}" onclick="goToPage(${currentPage-1})">‹</button>`;
+  for (let i = 1; i <= totalPages; i++) {
+    html += `<button class="page-btn ${i===currentPage?'active':''}" onclick="goToPage(${i})">${i}</button>`;
+  }
+  html += `<button class="page-btn ${currentPage===totalPages?'disabled':''}" onclick="goToPage(${currentPage+1})">›</button>`;
+  el.innerHTML = html;
+}
+
+window.goToPage = function(page) {
+  currentPage = page;
+  renderProducts();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+// ---- FILTER EVENTS ----
+function initFilterEvents() {
+  document.querySelectorAll('.filter-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      const filter = opt.dataset.filter;
+      const value = opt.dataset.value;
+      opt.classList.toggle('checked');
+      const arr = activeFilters[filter];
+      const idx = arr.indexOf(value);
+      if (idx === -1) arr.push(value);
+      else arr.splice(idx, 1);
+      currentPage = 1;
+      renderProducts();
+    });
+  });
+
+  document.getElementById('apply-price').addEventListener('click', () => {
+    const min = parseFloat(document.getElementById('price-min').value);
+    const max = parseFloat(document.getElementById('price-max').value);
+    activeFilters.priceMin = isNaN(min) ? null : min;
+    activeFilters.priceMax = isNaN(max) ? null : max;
+    currentPage = 1;
+    renderProducts();
+  });
+
+  document.getElementById('clear-all-filters').addEventListener('click', clearAllFilters);
+}
+
+window.clearAllFilters = function() {
+  activeFilters = { category: [], brand: [], jerseyType: [], inStock: [], priceMin: null, priceMax: null };
+  document.querySelectorAll('.filter-option').forEach(o => o.classList.remove('checked'));
+  document.getElementById('price-min').value = '';
+  document.getElementById('price-max').value = '';
+  currentPage = 1;
+  renderProducts();
+};
+
+function tickFilterOption(filter, value) {
+  const opt = document.querySelector(`.filter-option[data-filter="${filter}"][data-value="${value}"]`);
+  if (opt) opt.classList.add('checked');
+}
+
+function renderActiveFilterTags() {
+  const wrap = document.getElementById('active-filters-wrap');
+  const tags = [];
+  activeFilters.category.forEach(v => tags.push({ label: 'Category: ' + v, filter: 'category', value: v }));
+  activeFilters.brand.forEach(v => tags.push({ label: 'Brand: ' + v, filter: 'brand', value: v }));
+  activeFilters.jerseyType.forEach(v => tags.push({ label: 'Type: ' + v, filter: 'jerseyType', value: v }));
+  activeFilters.inStock.forEach(v => tags.push({ label: 'In Stock', filter: 'inStock', value: v }));
+  if (activeFilters.priceMin !== null || activeFilters.priceMax !== null) {
+    tags.push({ label: `₹${activeFilters.priceMin||0} – ₹${activeFilters.priceMax||'∞'}`, filter: 'price', value: 'price' });
+  }
+  wrap.innerHTML = tags.length
+    ? tags.map(t => `<span class="active-filter-tag" onclick="removeFilter('${t.filter}','${t.value}')">
+        ${t.label} ✕
+      </span>`).join('')
+    : '';
+}
+
+window.removeFilter = function(filter, value) {
+  if (filter === 'price') {
+    activeFilters.priceMin = null; activeFilters.priceMax = null;
+    document.getElementById('price-min').value = '';
+    document.getElementById('price-max').value = '';
+  } else {
+    const arr = activeFilters[filter];
+    const idx = arr.indexOf(value);
+    if (idx !== -1) arr.splice(idx, 1);
+    const opt = document.querySelector(`.filter-option[data-filter="${filter}"][data-value="${value}"]`);
+    if (opt) opt.classList.remove('checked');
+  }
+  currentPage = 1;
+  renderProducts();
+};
+
+function updateShopTitle() {
+  const params = new URLSearchParams(window.location.search);
+  const cat = params.get('cat');
+  const brand = params.get('brand');
+  const titleEl = document.getElementById('shop-page-title');
+  const breadEl = document.getElementById('shop-breadcrumb');
+  if (cat) {
+    const labels = { jersey: 'Jerseys', studs: 'Studs & Shoes', gear: 'Football Gear' };
+    titleEl.innerHTML = `Shop <span>${labels[cat] || cat}</span>`;
+    breadEl.textContent = labels[cat] || cat;
+  } else if (brand) {
+    titleEl.innerHTML = `Shop <span>${brand.charAt(0).toUpperCase()+brand.slice(1)}</span>`;
+    breadEl.textContent = brand.charAt(0).toUpperCase()+brand.slice(1);
+  }
+}
+
+// ---- SORT ----
+function initSortSelect() {
+  document.getElementById('sort-select').addEventListener('change', function() {
+    currentSort = this.value;
+    currentPage = 1;
+    renderProducts();
+  });
+}
+
+// ---- VIEW TOGGLE ----
+function initViewToggle() {
+  document.getElementById('grid-view-btn').addEventListener('click', () => {
+    isListView = false;
+    document.getElementById('grid-view-btn').classList.add('active');
+    document.getElementById('list-view-btn').classList.remove('active');
+    document.getElementById('products-grid').classList.remove('list-view');
+  });
+  document.getElementById('list-view-btn').addEventListener('click', () => {
+    isListView = true;
+    document.getElementById('list-view-btn').classList.add('active');
+    document.getElementById('grid-view-btn').classList.remove('active');
+    document.getElementById('products-grid').classList.add('list-view');
+  });
+}
+
+// ---- MOBILE FILTER DRAWER ----
+function initMobileFilter() {
+  const btn = document.getElementById('mobile-filter-toggle');
+  const overlay = document.getElementById('filter-drawer-overlay');
+  const drawer = document.getElementById('filter-drawer');
+  const drawerInner = document.getElementById('filter-drawer-inner');
+
+  btn.addEventListener('click', () => {
+    // Clone sidebar filters into drawer
+    drawerInner.innerHTML = document.getElementById('filter-sidebar').innerHTML;
+    overlay.classList.add('open');
+    drawer.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    // Re-attach events to cloned elements
+    drawerInner.querySelectorAll('.filter-option').forEach(opt => {
+      const filter = opt.dataset.filter;
+      const value = opt.dataset.value;
+      if (activeFilters[filter] && activeFilters[filter].includes(value)) opt.classList.add('checked');
+      opt.addEventListener('click', () => {
+        opt.classList.toggle('checked');
+        const arr = activeFilters[filter];
+        const idx = arr.indexOf(value);
+        if (idx === -1) arr.push(value); else arr.splice(idx, 1);
+        currentPage = 1; renderProducts();
+      });
+    });
+  });
+
+  const closeDrawer = () => {
+    overlay.classList.remove('open');
+    drawer.classList.remove('open');
+    document.body.style.overflow = '';
+  };
+  overlay.addEventListener('click', closeDrawer);
+}
+
+// ---- FILTER GROUP TOGGLE ----
+window.toggleFilterGroup = function(id) {
+  const group = document.getElementById(id);
+  if (group) group.classList.toggle('open');
+};
+</script>
 </body>
 </html>
